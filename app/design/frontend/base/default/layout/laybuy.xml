@@ -2,8 +2,8 @@
 <layout version="0.1.0">
 	<default>
 		<reference name="head">
-			<action method="addItem"><type>js</type><name>laybuy/jquery.min.js</name></action>
-			<action method="addItem"><type>js</type><name>laybuy/jquery.atooltip.js</name></action>
+			<action method="addItem" ifconfig="payment/laybuy/active"><type>js</type><name>laybuy/jquery.min.js</name></action>
+			<action method="addItem" ifconfig="payment/laybuy/active"><type>js</type><name>laybuy/jquery.atooltip.js</name></action>
 		</reference>
 	</default>
 	<checkout_onepage_review>
@@ -49,88 +49,4 @@
             <block type="laybuy/customer_account_grid" name="transaction_grid" template="laybuy/customer/account/grid.phtml"/>
 		</reference>
 	</laybuy_report_grid>
-	
-	<!-- new code by me starts-->
-	<catalog_product_view>
-        <reference name="product.info.addtocart">
-            <block type="page/html_wrapper" name="product.info.addtocart.laybuy.wrapper" translate="label">
-                <label>Laybuy Express Checkout Shortcut Wrapper</label>
-                <block type="laybuy/express_layshortcut" name="product.info.addtocart.laybuy" template="laybuy/express/layshortcut.phtml">
-                   <action method="setIsInCatalogProduct"><value>1</value></action>
-                </block>
-            </block>
-        </reference>
-   </catalog_product_view>
-    <default>
-        <reference name="topCart.extra_actions">
-            <block type="laybuy/express_layshortcut" name="laybuy.partner.top_cart.shortcut" template="laybuy/express/layshortcut1.phtml"/>
-        </reference>
-        <reference name="cart_sidebar.extra_actions">
-            <block type="laybuy/express_layshortcut" name="laybuy.partner.cart_sidebar.shortcut" template="laybuy/express/layshortcut1.phtml"/>
-        </reference>
-    </default>
-   <checkout_cart_index>
-        <reference name="checkout.cart.top_methods">
-            <block type="laybuy/express_layshortcut" name="checkout.cart.methods.laybuy_express.top" before="-" template="laybuy/express/layshortcut1.phtml">
-                <action method="setIsQuoteAllowed"><value>1</value></action>
-            </block>
-        </reference>
-
-        <reference name="checkout.cart.methods">
-            <block type="laybuy/express_layshortcut" name="checkout.cart.methods.laybuy_express.bottom" before="-" template="laybuy/express/layshortcut1.phtml">
-                <action method="setIsQuoteAllowed"><value>1</value></action>
-            </block>
-        </reference>
-
-        <!-- <update handle="SHORTCUT_popup" />-->
-    </checkout_cart_index>
-   <laybuy_express_index>
-   		<remove name="right"/>
-        <remove name="left"/>
-		<reference name="root">
-            <action method="setTemplate"><template>page/1column.phtml</template></action>
-        </reference>
-        <reference name="content">
-            <block type="laybuy/express_layform" name="laybuy.express.layform"  template="laybuy/express/extraexpress.phtml">
-            </block>
-        </reference>
-   </laybuy_express_index>
-   <laybuy_express_review translate="label">
-        <label>Laybuy Express Order Review Form</label>
-        <remove name="right"/>
-        <remove name="left"/>
-		<reference name="root">
-            <action method="setTemplate"><template>page/1column.phtml</template></action>
-        </reference>
-        <reference name="content">
-            <block type="laybuy/express_review" name="laybuy.express.review" template="laybuy/express/review.phtml">
-            	<block type="core/template" name="laybuy.checkout.onepage.review.button" as="laybuy_button" template="laybuy/checkout/onepage/review/button_express.phtml"/>
-                <block type="laybuy/express_review_billing" name="express.review.billing" as="billing" template="laybuy/express/review/address.phtml"/>
-                <block type="laybuy/express_review_shipping" name="express.review.shipping" as="shipping" template="laybuy/express/review/address.phtml"/>
-                <block type="laybuy/express_review" name="express.review.shipping.method" as="shipping_method" template="laybuy/express/review/shipping/method.phtml"/>
-                <block type="laybuy/express_review_details" name="laybuy.express.review.details" as="details" template="laybuy/express/review/details.phtml">
-                    <action method="addItemRender"><type>default</type><block>checkout/cart_item_renderer</block><template>checkout/onepage/review/item.phtml</template></action>
-                    <action method="addItemRender"><type>grouped</type><block>checkout/cart_item_renderer_grouped</block><template>checkout/onepage/review/item.phtml</template></action>
-                    <action method="addItemRender"><type>configurable</type><block>checkout/cart_item_renderer_configurable</block><template>checkout/onepage/review/item.phtml</template></action>
-                    <block type="checkout/cart_totals" name="laybuy.express.review.details.totals" as="totals" template="checkout/onepage/review/totals.phtml"/>
-                </block>
-                <block type="checkout/agreements" name="laybuy.express.review.details.agreements" as="agreements" template="checkout/onepage/agreements.phtml"/>
-            </block>
-        </reference>
-        <reference name="head">
-            <!--<action method="addItem"><type>skin_js</type><name>js/checkout/review.js</name></action>-->
-            <action method="addItem"><type>js</type><name>laybuy/review.js</name></action>
-        </reference>
-        <block type="core/text_list" name="additional.product.info" />
-    </laybuy_express_review>
-   <laybuy_express_review_details>
-        <block type="laybuy/express_review_details" name="root" output="toHtml" template="laybuy/express/review/details.phtml">
-            <action method="addItemRender"><type>default</type><block>checkout/cart_item_renderer</block><template>checkout/onepage/review/item.phtml</template></action>
-            <action method="addItemRender"><type>grouped</type><block>checkout/cart_item_renderer_grouped</block><template>checkout/onepage/review/item.phtml</template></action>
-            <action method="addItemRender"><type>configurable</type><block>checkout/cart_item_renderer_configurable</block><template>checkout/onepage/review/item.phtml</template></action>
-            <block type="core/template" name="laybuy.checkout.onepage.review.button" as="laybuy_button" template="laybuy/checkout/onepage/review/button_express.phtml"/>
-            <block type="checkout/cart_totals" name="laybuy.express.review.details.totals" as="totals" template="checkout/onepage/review/totals.phtml"/>
-        </block>
-    </laybuy_express_review_details>
-	<!-- new code by me ends -->
 </layout>

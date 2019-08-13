@@ -44,15 +44,14 @@ class Ced_LayBuy_Block_Standard_Redirect extends Mage_Core_Block_Abstract
 			$html.= '<script type="text/javascript">setTimeout(\'window.location="'.$redirectURL.'"\',1000);</script>';
 			$html.= '</body></html>';
 		}else{
-			$html = '<html><body>';
+			$session->addError($helper->__('Order # - '.$data ["CUSTOM"].' successfull but payment not completed. Please inform store owner.'));
+			$html = Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getBaseUrl().'checkout/cart/index');
+			/*$html = '<html><body>';
 			$html.= $this->__('You will be redirected to the PayPal website in a few seconds.');
 			$html.= '<br><input type="button" onClick="window.location=window.location;" value="'.$this->__('Click here if you are not redirected within 10 seconds...').'" />';
 			$html.= '<script type="text/javascript">setTimeout("window.location=window.location;",1000);</script>';
-			$html.= '</body></html>';
+			$html.= '</body></html>';*/
 		}
-
-		
-
-        return $html;
+		return $html;
     }
 }

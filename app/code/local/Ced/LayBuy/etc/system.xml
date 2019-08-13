@@ -267,28 +267,6 @@
 							<show_in_default>1</show_in_default>
 							<shared>1</shared>
 						</settlement_reports_time>
-						<heading_express translate="label">
-							<label>Enable Express Checkout</label>
-							<frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
-							<sort_order>100</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<shared>1</shared>
-						</heading_express>
-						<active_express translate="label comment">
-							<label>Enabled</label>
-							<frontend_type>select</frontend_type>
-							<config_path>payment/laybuy_express/active</config_path>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>101</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</active_express>
-						<sort_order>101</sort_order>
-						<show_in_default>1</show_in_default>
-						<show_in_website>1</show_in_website>
-						<show_in_store>0</show_in_store>
 					</fields>
 				</laybuy>
 			</groups>

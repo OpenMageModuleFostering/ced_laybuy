@@ -291,37 +291,15 @@ class Ced_LayBuy_Helper_Data extends Mage_Core_Helper_Abstract{
 		}
 	}
 	
-	/*public function getPaidOrders() {
+	public function getPaidOrders() {
 		$code = Mage::getModel('laybuy/standard')->_code;
 		$collection = Mage::getResourceModel('sales/order_grid_collection');
 		$collection->join(array('payment'=>'sales/order_payment'),'main_table.entity_id=parent_id && main_table.status = "processing"','method');
 		$collection->join(array('order'=>'sales/order'),'payment.parent_id = order.entity_id','*');
 		$collection->addFieldToFilter('method',$code);
 		return $collection->getAllIds();
-	}*/
-	public function getPaidOrders() {
-				 $code = Mage::getModel('laybuy/standard')->_code;
-				 $collection = Mage::getResourceModel('sales/order_grid_collection');
-				 $paymentTable = Mage::getModel('core/resource')->getTableName("sales/order_payment");
-				 //$paymentTable =$collection->getTable("sales/order_payment");  
-				 //$orderTable = $collection->getTable("sales/order");
-				 $orderTable = Mage::getModel('core/resource')->getTableName("sales/order");
-				 $collection->getSelect()->join(
-				  		array('e1'=>$paymentTable),
-				  		'`e1`.`parent_id`=`main_table`.`entity_id` and `main_table`.`status`="processing"',
-				  		array('method')
-				  );
-				  //$collection->join($paymentTable,'`main_table`.`entity_id`=`'.$paymentTable.'`.`parent_id` && `main_table`.`status` = "processing"','method');
-			
-				  $collection->getSelect()->join(
-				  		array('e2'=>$orderTable),
-				  		'`e1`.`parent_id`=`e2`.`entity_id`',
-				  		array('*')
-				  );
-				  //$collection->join($orderTable,'`'.$paymentTable.'`.`parent_id` = '.$orderTable.'.entity_id','*');
-				  $collection->addFieldToFilter('method',$code);
-				  return $collection->getAllIds();
-		 }
+	}
+	
 	public function fetchBeforeRevise($profileId = 0) {
 		if($profileId) {
 			$this->_matchingData = array('orderIds'=>'','profileIds'=>$profileId);

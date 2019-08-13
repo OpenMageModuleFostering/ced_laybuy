@@ -128,4 +128,4 @@
 		}); // END: return this
     };
 })(jQuery);
-jQuery.noConflict();
+//laybuy.noConflict();

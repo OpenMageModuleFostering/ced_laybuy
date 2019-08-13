@@ -31,14 +31,14 @@
  */
 ?>
 <p><strong><?php echo $this->htmlEscape($this->getMethod()->getTitle()) ?></strong></p>
-<?php if ($_specificInfo = $this->getSpecificInformation()):?>
-	<table>
-		<tbody>
-			<tr>
-				<th><strong><a href="<?php echo $this->getUrl('laybuy/report/grid',array('order_id'=>$this->getRequest()->getParam('order_id'))); ?>" ><?php echo Mage::helper('laybuy')->__('View Instalment Plan'); ?></a></strong></th>
-			</tr>
-		</tbody>
-	</table>
+<?php if ($_specificInfo = $this->getSpecificInformation() && $this->getRequest()->getModuleName()=='customer'):?>
+		<table>
+			<tbody>
+				<tr>
+					<th><strong><a href="<?php echo $this->getUrl('laybuy/report/grid',array('_secure' => true,'order_id'=>$this->getRequest()->getParam('order_id'))); ?>" ><?php echo Mage::helper('laybuy')->__('View Instalment Plan'); ?></a></strong></th>
+				</tr>
+			</tbody>
+		</table>
 <?php else:?>
 	<p>
 		<?php 

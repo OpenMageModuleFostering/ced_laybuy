@@ -52,7 +52,7 @@ class Ced_LayBuy_Block_Customer_Account_Details extends Mage_Core_Block_Template
 
 	public function getBackUrl()
     {
-        return $this->getUrl('laybuy/report/grid/',array('order_id'=>$this->_orderId));
+        return $this->getUrl('laybuy/report/grid/',array('_secure' => true,'order_id'=>$this->_orderId));
     }
 	
 	public function getBackTitle()

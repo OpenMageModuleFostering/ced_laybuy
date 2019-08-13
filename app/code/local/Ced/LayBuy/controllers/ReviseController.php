@@ -42,7 +42,7 @@ class Ced_LayBuy_ReviseController extends Mage_Core_Controller_Front_Action
 		$session = Mage::getSingleton('checkout/session');
 		Mage::log('Revise Order of LayBuy {{'."Order_id=".$order->getId()."|".$this->getRequest()->getParam('ErrorMessage')."}}", null, 'laybuy_failure.log');
 		$session->addError($this->getRequest()->getParam('ErrorMessage'));
-        $this->_redirect('checkout/onepage/failure');
+        $this->_redirect('checkout/onepage/failure',array('_secure' => true));
     }
 
     /**
@@ -157,6 +157,6 @@ class Ced_LayBuy_ReviseController extends Mage_Core_Controller_Front_Action
 				$session->addError($this->__('Try Again Later.'));
 			}
 		}		
-        $this->_redirect('checkout/onepage/success');
+        $this->_redirect('checkout/onepage/success',array('_secure' => true));
     }
 }

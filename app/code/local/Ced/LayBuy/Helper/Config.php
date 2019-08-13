@@ -41,7 +41,7 @@ class Ced_LayBuy_Helper_Config extends Mage_Core_Helper_Abstract
 	 * Get the gateway submit url
 	 */
 	public function getSubmitUrl(){
-		return Mage::getStoreConfig('payment/laybuy/submit_url');
+		return Mage::getStoreConfig('payment/laybuy/submit_url',$this->getStoreId());
 	}	
 	/*
 	 * For form filed At LayBuy gateway
@@ -72,8 +72,8 @@ class Ced_LayBuy_Helper_Config extends Mage_Core_Helper_Abstract
 						'AMOUNT'	=> number_format($amount, 2, '.', ''),
 						'MEMBER' 	=> Mage::getStoreConfig('payment/laybuy/membership_number',$storeId),
 						'CURRENCY'  => $currency_code,
-						'RETURNURL' => Mage::getBaseUrl().'laybuy/standard/success',
-						'CANCELURL' => Mage::getBaseUrl().'laybuy/standard/cancel',
+						'RETURNURL' => Mage::getUrl('laybuy/standard/success',array('_secure'=>true)),
+						'CANCELURL' => Mage::getUrl('laybuy/standard/cancel',array('_secure'=>true)),
 						 $descKey	=> $description,
 						'CUSTOM'	=> $orderId,
 						'EMAIL' 	=> $email,

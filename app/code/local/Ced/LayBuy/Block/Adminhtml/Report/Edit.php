@@ -52,7 +52,7 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit extends Mage_Adminhtml_Block_Widget
 		
 			'label'    => Mage::helper('laybuy')->__('Back'),
 			
-			'onclick'  => "setLocation('{$this->getUrl('*/*/details',array('id'=>$this->getRequest()->getParam('id')))}')",
+			'onclick'  => "setLocation('{$this->getUrl('*/*/details',array('_secure' => true,'id'=>$this->getRequest()->getParam('id')))}')",
 			
 			'class'	   => 'back',
 		));

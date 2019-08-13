@@ -128,7 +128,6 @@
 				<title>Lay-Buy</title>
 				<payment_action>sale</payment_action>
 				<submit_url>http://lay-buys.com/gateway/</submit_url>
-				<membership_number>00000</membership_number>
 				<multipledesc>1</multipledesc>
 				<desc>Description of products / services</desc>
 				<mind>20%</mind>

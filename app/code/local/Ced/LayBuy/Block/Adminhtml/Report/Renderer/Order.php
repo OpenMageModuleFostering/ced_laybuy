@@ -35,7 +35,7 @@ class Ced_LayBuy_Block_Adminhtml_Report_Renderer_Order extends Mage_Adminhtml_Bl
        	$orderId=$row->getOrderId();
 		$order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
 		if($order && $order->getId()){
-			$orderUrl = Mage::helper('adminhtml')->getUrl('adminhtml/sales_order/view',array('order_id'=>$order->getId()));
+			$orderUrl = Mage::helper('adminhtml')->getUrl('adminhtml/sales_order/view',array('_secure' => true,'order_id'=>$order->getId()));
 			return '<a title="'.$orderUrl.'" href="'.$orderUrl.'">'.$orderId.'</a>';
 		}else{
 			return $orderId;

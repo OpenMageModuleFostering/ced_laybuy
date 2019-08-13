@@ -53,7 +53,7 @@ class Ced_LayBuy_Block_Adminhtml_Report_Details extends Mage_Adminhtml_Block_Wid
 
 				'label'   => Mage::helper('laybuy')->__('Cancel Transaction'),
 
-				'onclick' => "confirmSetLocation('{$message}', '{$this->getUrl('*/*/cancel',array('id'=>$this->getRequest()->getParam('id')))}')",
+				'onclick' => "confirmSetLocation('{$message}', '{$this->getUrl('*/*/cancel',array('_secure' => true,'id'=>$this->getRequest()->getParam('id')))}')",
 
 				'class'	  => 'delete',
 			));
@@ -62,7 +62,7 @@ class Ced_LayBuy_Block_Adminhtml_Report_Details extends Mage_Adminhtml_Block_Wid
 			
                 'label'    => Mage::helper('laybuy')->__('Revise Instalment Plan'),
 				
-				'onclick'  => "setLocation('{$this->getUrl('*/*/edit',array('id'=>$this->getRequest()->getParam('id')))}')",
+				'onclick'  => "setLocation('{$this->getUrl('*/*/edit',array('_secure' => true,'id'=>$this->getRequest()->getParam('id')))}')",
 				
 				'class'	   => 'add',
             ));

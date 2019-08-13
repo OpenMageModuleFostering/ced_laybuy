@@ -30,5 +30,5 @@
 	<?php if(!Mage::getStoreConfig('paymnet/laybuy/cronenabled')){ ?>
 		<strong class="label">Cron must be enabled for "Automated Fetch Updates".</strong>
 	<?php } ?>
-	Click here to go to	<a href="<?php echo Mage::helper("adminhtml")->getUrl("laybuy/adminhtml_report/"); ?>">Lay-Buys Instalment Reports</a>.
+	Click here to go to	<a href="<?php echo Mage::helper("adminhtml")->getUrl("laybuy/adminhtml_report/",array('_secure'=>true)); ?>">Lay-Buys Instalment Reports</a>.
 </div>

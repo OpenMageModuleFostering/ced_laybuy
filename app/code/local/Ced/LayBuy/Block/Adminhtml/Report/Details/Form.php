@@ -164,21 +164,6 @@ class Ced_LayBuy_Block_Adminhtml_Report_Details_Form extends Mage_Adminhtml_Bloc
                 ),
                 'legend' => Mage::helper('laybuy')->__('Customer Information')
             ),
-            /* 'fee_fieldset' => array(
-                'fields' => array(
-                    'fee_debit_or_credit' => array(
-                        'label' => $settlement->getFieldLabel('fee_debit_or_credit'),
-                        'value' => $model->getDebitCreditText($model->getData('fee_debit_or_credit'))
-                    ),
-                    'fee_amount' => array(
-                        'label' => $settlement->getFieldLabel('fee_amount'),
-                        'value' => Mage::app()->getLocale()
-                                       ->currency($model->getData('fee_currency'))
-                                       ->toCurrency($model->getData('fee_amount'))
-                    ),
-                ),
-                'legend' => Mage::helper('laybuy')->__('Lay-Buy Fee Information')
-            ), */
         );
 
         $form = new Varien_Data_Form();

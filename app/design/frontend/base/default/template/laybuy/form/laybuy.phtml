@@ -31,18 +31,17 @@
  * @see Mage_Core_Block_Template
  */
 ?>
-<!-- Include the needed css/js files-->  
-<link media="screen" rel="stylesheet" href="<?php echo Mage::getBaseUrl('skin'); ?>frontend/base/default/css/laybuy/tooltip.css" type="text/css">
+<link media="all" rel="stylesheet" href="<?php echo Mage::getBaseUrl('skin'); ?>frontend/base/default/css/laybuy/tooltip.css" type="text/css">
 <!--<script type="text/javascript" src="<?php //echo Mage::getBaseUrl('js'); ?>laybuy/jquery.min.js"></script>  
 <script type="text/javascript" src="<?php //echo Mage::getBaseUrl('js'); ?>laybuy/jquery.atooltip.js"></script>-->
 <img src="<?php echo $this->escapeHtml($this->getPaymentAcceptanceMarkSrc())?>" alt="<?php echo Mage::helper('laybuy')->__('LAY-BUY') ?>" title="<?php echo $this->escapeHtml($this->getLayBuyTitle()) ?>" class="v-middle" />&nbsp;
-<!--<a href="<?php echo $this->getPaymentAcceptanceMarkHref()?>" onclick="javascript:window.open('<?php echo $this->getPaymentAcceptanceMarkHref()?>','olcwhatispaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,left=0, top=0, width=400, height=350'); return false;"><?php echo Mage::helper('laybuy')->__('What is LAY-BUY?') ?></a>-->
-<a href="#<?php /*echo $this->getPaymentAcceptanceMarkHref()*/ ?>" class="callBackTip" title="<?php echo Mage::helper('laybuy')->__('Lay-Buy is an affordable payment plan option that allows you to pay-off a product or service via one down payment, with the balance paid over 1, 2 or 3 monthly instalments. Your purchase is delivered to you after the final instalment payment is completed.') ?>"><?php echo Mage::helper('laybuy')->__('What is LAY-BUY?') ?></a>
+<a href="#" class="callBackTip" title="<?php echo Mage::helper('laybuy')->__('Lay-Buy is an affordable payment plan option that allows you to pay-off a product or service via one down payment, with the balance paid over 1, 2 or 3 monthly instalments. Your purchase is delivered to you after the final instalment payment is completed.') ?>"><?php echo Mage::helper('laybuy')->__('What is LAY-BUY?') ?></a>
 <script type="text/javscript">
     // initiate the plugin after DOM has loaded
-    jQuery(function(){    
+	//var laybuy = jQuery.noConflict();
+    laybuy(function(){    
         // List of all parameters and their default values:  
-       jQuery('a.callBackTip').aToolTip({  
+       laybuy('a.callBackTip').aToolTip({  
             // no need to change/override  
             closeTipBtn: 'aToolTipCloseBtn',  
             toolTipId: 'aToolTip',  

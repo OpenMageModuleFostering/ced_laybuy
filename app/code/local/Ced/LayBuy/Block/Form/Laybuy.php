@@ -50,8 +50,8 @@ class Ced_LayBuy_Block_Form_Laybuy extends Mage_Payment_Block_Form
         $laybuyMark = new $laybuyMark;
         $laybuyMark->setTemplate('laybuy/form/laybuy.phtml')
 			 ->setLayBuyTitle(Mage::helper('laybuy')->__('A recurring payment solution'))
-			 ->setPaymentAcceptanceMarkSrc('http://lay-buys.com/gateway/LAY-BUY.png')
-			 ->setPaymentAcceptanceMarkHref('http://lay-buys.com/');
+			 ->setPaymentAcceptanceMarkSrc('https://lay-buys.com/gateway/LAY-BUY.png')
+			 ->setPaymentAcceptanceMarkHref('https://lay-buys.com/');
 		$note = 'Please Choose Your Payment Plan';
 		$this->setTemplate('laybuy/form/extra.phtml')
 			 ->setMethodTitle('')

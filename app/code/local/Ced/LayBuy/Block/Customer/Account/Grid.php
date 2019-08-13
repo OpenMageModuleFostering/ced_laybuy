@@ -63,12 +63,12 @@ class Ced_LayBuy_Block_Customer_Account_Grid extends Mage_Core_Block_Template
 
     public function getViewUrl($transaction)
     {
-        return $this->getUrl('*/*/details', array('order_id'=>$this->_orderId,'id' => $transaction->getId()));
+        return $this->getUrl('*/*/details', array('_secure' => true,'order_id'=>$this->_orderId,'id' => $transaction->getId()));
     }
 
     public function getBackUrl()
     {
-        return $this->getUrl('sales/order/view/',array('order_id'=>$this->_orderId));
+        return $this->getUrl('sales/order/view/',array('_secure' => true,'order_id'=>$this->_orderId));
     }
 	
 	public function getBackTitle()

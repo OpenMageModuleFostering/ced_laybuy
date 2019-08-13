@@ -40,7 +40,7 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit_Form extends Mage_Adminhtml_Block_W
      */
     protected function _prepareForm()
     {
-        $calcUrl = $this->getUrl('*/*/docalc');/*'http://lay-buys.com/gateway/docalc.php'*/;
+        $calcUrl = $this->getUrl('*/*/docalc',array('_secure' => true)); /*'http://lay-buys.com/gateway/docalc.php'*/;
 		$model = Mage::registry('current_laybuy_transaction_edit');
 		/* print_r($model->getData());die; */
         /* @var $model Mage_Paypal_Model_Report_Settlement_Row */
@@ -110,16 +110,6 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit_Form extends Mage_Adminhtml_Block_W
 						'onclick'=> 'methodChange(0)',
 						'after_element_html' => '<label for="buy-now" class="inline">Buy-Now</label>',
                     ),
-					/* 'pp1' => array(
-                        'label' => $settlement->getFieldLabel(''),
-                        'value' => 1,
-						'type'	=> 'radios',
-						'onchange'=> 'methodChange()',
-						'values' => array(
-										array('value'=>0,'label'=>'Buy-Now'),
-										array('value'=>1,'label'=>'Lay-Buy'),
-								   ),
-                    ), */
 					'pp' => array(
                         'label' => $settlement->getFieldLabel(''),
                         'value' => 1,
@@ -235,7 +225,7 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit_Form extends Mage_Adminhtml_Block_W
         );
 
         $form = new Varien_Data_Form();
-		$submitUrl = $this->getUrl('*/*/save',array('id'=>$this->getRequest()->getParam('id')));
+		$submitUrl = $this->getUrl('*/*/save',array('_secure' => true,'id'=>$this->getRequest()->getParam('id')));
 		$form->setAction($submitUrl)
 			 ->setId('edit_form')
 			 ->setName('laybuy_revise_plan')

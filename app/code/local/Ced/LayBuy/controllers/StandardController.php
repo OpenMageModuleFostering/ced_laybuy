@@ -202,7 +202,7 @@ class Ced_LayBuy_StandardController extends Mage_Core_Controller_Front_Action
 
 		$session->addError($this->getRequest()->getParam('ErrorMessage','Try Again Later.'));
 
-        $this->_redirect('checkout/onepage/failure');
+        $this->_redirect('checkout/onepage/failure',array('_secure' => true));
 
     }
 
@@ -350,7 +350,7 @@ class Ced_LayBuy_StandardController extends Mage_Core_Controller_Front_Action
 			
 		}	
 
-        $this->_redirect('checkout/onepage/success');
+        $this->_redirect('checkout/onepage/success',array('_secure' => true));
 
     }
 	

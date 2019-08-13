@@ -40,7 +40,7 @@ class Ced_LayBuy_Block_Adminhtml_Report extends Mage_Adminhtml_Block_Widget_Grid
         $message = Mage::helper('laybuy')->__('Connecting to Lay-Buy server to fetch transaction updates. Are you sure you want to proceed?');
         $this->_addButton('fetch', array(
             'label'   => Mage::helper('laybuy')->__('Fetch Updates'),
-            'onclick' => "confirmSetLocation('{$message}', '{$this->getUrl('*/*/fetch')}')",
+            'onclick' => "confirmSetLocation('{$message}', '{$this->getUrl('*/*/fetch',array('_secure' => true))}')",
             'class'   => 'task'
         ));
   }

@@ -1,56 +1,47 @@
-<?xml version="1.0" encoding="utf-8"?>
-<config>
-	<menu>
-		<report>
-			<children>
-				<salesroot>
-					<children>
-						<laybuyreport module="laybuy" translate="title">
-							<title>Lay-Buy Instalment Reports</title>
-							<action>laybuy/adminhtml_report</action>
-							<sort_order>110</sort_order> 
-						</laybuyreport>
-					</children>
-				</salesroot>
-			</children>
-		</report>		
-	</menu>
-	<acl>
-		<resources>
-			<all>
-				<title>Allow Everything</title>
-			</all> 
-			<admin>
-				<children>
-					<system>
-                        <children>
-                            <config>
-                                <children>
-                                    <laybuy translate="title">
-                                        <title>Lay-Buy Section</title>
-                                    </laybuy>
-                                </children>
-                            </config>
-                        </children>
-                    </system>
-					<report>
-						<children>
-							<salesroot>
-								<children>
-									<laybuyreport module="laybuy" translate="title">
-										<title>Lay-Buy Instalment Reports</title>
-										<children>											<fetch translate="title">                                                <title>Fetch Updates</title>												<sort_order>10</sort_order>                                             </fetch>											
-                                            <view translate="title">
-                                                <title>View</title>												<sort_order>20</sort_order> 												
-                                            </view>																						<cancel translate="title">                                                <title>Cancel Transaction</title>																								<sort_order>30</sort_order>                                             </cancel>																						<update translate="title">                                                <title>Revise Instalment Plan</title>																								<sort_order>40</sort_order>                                             </update>
-                                        </children> 
-									</laybuyreport>	
-								</children>
-							</salesroot>
-						</children>
-					</report>
-				</children>
-			</admin>
-		</resources>
-	</acl>
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<menu>
+		<report>			<children>				<salesroot>					<children>						<laybuyreport module="laybuy" translate="title">							<title>Lay-Buy Instalment Reports</title>
+							<action>laybuy/adminhtml_report</action>
+							<sort_order>110</sort_order> 
+						</laybuyreport>
+					</children>
+				</salesroot>
+			</children>
+		</report>		
+	</menu>
+	<acl>
+		<resources>			<all>				<title>Allow Everything</title>
+			</all> 
+			<admin>				<children>
+					<system>
+                        <children>
+                            <config>
+                                <children>
+                                    <laybuy translate="title">
+                                        <title>Lay-Buy Section</title>
+                                    </laybuy>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+					<report>						<children>
+							<salesroot>
+								<children>
+									<laybuyreport module="laybuy" translate="title">
+										<title>Lay-Buy Instalment Reports</title>
+										<children>											<fetch translate="title">                                                <title>Fetch Updates</title>												<sort_order>10</sort_order>                                             </fetch>										
+                                            <view translate="title">
+                                                <title>View</title>												<sort_order>20</sort_order> 												
+                                            </view>																					<cancel translate="title">                                                <title>Cancel Transaction</title>																								<sort_order>30</sort_order>                                             </cancel>																					<update translate="title">                                                <title>Revise Instalment Plan</title>																							<sort_order>40</sort_order>                                             </update>
+                                        </children> 
+									</laybuyreport>	
+								</children>
+							</salesroot>
+						</children>
+					</report>
+				</children>
+			</admin>
+		</resources>
+	</acl>
 </config>

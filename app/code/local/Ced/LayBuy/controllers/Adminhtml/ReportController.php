@@ -64,7 +64,7 @@ class Ced_LayBuy_Adminhtml_ReportController extends Mage_Adminhtml_Controller_Ac
         $rowId = $this->getRequest()->getParam('id');
         $row = Mage::getModel('laybuy/report')->load($rowId);
         if (!$row->getId()) {
-            $this->_redirect('*/*/');
+            $this->_redirect('*/*/',array('_secure' => true));
             return;
         }
         Mage::register('current_laybuy_transaction', $row);
@@ -79,15 +79,6 @@ class Ced_LayBuy_Adminhtml_ReportController extends Mage_Adminhtml_Controller_Ac
      */
     public function fetchAction()
     {
-		/* $tomorrow  = mktime(0, 0, 0, date("m")  , date("d")+1, date("Y"));
-		echo date('Y-m-d h:i:s',$tomorrow);
-		echo "<br/>";
-		$nextmonth = mktime(0, 0, 0, date("m")+1, date("d"),   date("Y"));
-		echo date('Y-m-d h:i:s',$nextmonth);
-		echo "<br/>";
-		$nextyear  = mktime(0, 0, 0, date("m"),   date("d"),   date("Y")+1);
-		echo date('Y-m-d h:i:s',$nextyear);
-		die; */
 		try {
             $reports = Mage::getModel('laybuy/report');
             /* @var $reports Mage_laybuy_Model_Report_Instalment */
@@ -119,7 +110,7 @@ class Ced_LayBuy_Adminhtml_ReportController extends Mage_Adminhtml_Controller_Ac
         } catch (Exception $e) {
             Mage::logException($e);
         }
-        $this->_redirect('*/*/index');
+        $this->_redirect('*/*/index',array('_secure' => true));
     }
 	
 	/**
@@ -130,7 +121,7 @@ class Ced_LayBuy_Adminhtml_ReportController extends Mage_Adminhtml_Controller_Ac
         $rowId = $this->getRequest()->getParam('id');
         $row = Mage::getModel('laybuy/report')->load($rowId);
         if (!$row->getId()) {
-            $this->_redirect('*/*/');
+            $this->_redirect('*/*/',array('_secure' => true));
             return;
         }
         Mage::register('current_laybuy_transaction_edit', $row);
@@ -205,7 +196,7 @@ class Ced_LayBuy_Adminhtml_ReportController extends Mage_Adminhtml_Controller_Ac
 			Mage::logException($e);
 		}
 		
-		$this->_redirect('*/*/details',array('id'=>$rowId));
+		$this->_redirect('*/*/details',array('_secure' => true,'id'=>$rowId));
 		
     }
 	
@@ -233,7 +224,7 @@ class Ced_LayBuy_Adminhtml_ReportController extends Mage_Adminhtml_Controller_Ac
 			);
 			Mage::logException($e);
 		}
-		$this->_redirect('*/*/details',array('id'=>$id));
+		$this->_redirect('*/*/details',array('_secure' => true,'id'=>$id));
 	}
 
     /**

@@ -131,18 +131,7 @@ class Ced_LayBuy_Block_Adminhtml_Report_Grid extends Mage_Adminhtml_Block_Widget
 			'filter_index'  => 'last_payment_due',
 			'index'         => 'last_payment_due',
 			'type'          => 'datetime',
-		));
-		
-		/* $this->addColumn('email', array(
-			'header'        => Mage::helper('laybuy')->__('Email'),
-			'align'         => 'right',
-			'width'			=> '75',
-			'filter_index'  => 'email',
-			'index'         => 'email',
-			'type'          => 'text',
-			'renderer'  => 'Ced_LayBuy_Block_Adminhtml_Report_Renderer_Email',
-		)); */
-		/* $this->addColumn('report', array(			'header'        => Mage::helper('laybuy')->__('Payment Record'),			'align'         => 'left',			'index'         => 'report',			'type'          => 'range',						'filter'		=> false,						'renderer'  => 'Ced_LayBuy_Block_Adminhtml_Report_Renderer_Record',		)); */
+		));
 		$this->addColumn('status', array(
 			'header'        => Mage::helper('laybuy')->__('Status'),
 			'align'         => 'right',
@@ -160,6 +149,6 @@ class Ced_LayBuy_Block_Adminhtml_Report_Grid extends Mage_Adminhtml_Block_Widget
 
   public function getRowUrl($row)
   {
-      return $this->getUrl('*/*/details', array('id' => $row->getId()));
+      return $this->getUrl('*/*/details', array('_secure' => true,'id' => $row->getId()));
   }
 }

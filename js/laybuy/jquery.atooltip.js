@@ -166,5 +166,10 @@
 		  
 		}); // END: return this
     };
+	
+	
+	
+	
 })(jQuery);
+
 //laybuy.noConflict();

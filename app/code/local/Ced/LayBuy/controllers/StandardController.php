@@ -386,7 +386,12 @@ class Ced_LayBuy_StandardController extends Mage_Core_Controller_Front_Action
 		 $hght=150 / (2 + $mnth);
 		 $html .= '<thead><tr class="headings"><th class=" no-link" style="text-align: center; font-size: 0.7em; padding-bottom: 4px; padding-top: 4px;"><span class="nobr">Payment</span></th><th class=" no-link" style="text-align: center; font-size: 0.7em; padding-bottom: 4px; padding-top: 4px;"><span class="nobr">Due Date</span></th><th class=" no-link" style="text-align: center; font-size: 0.7em; padding-bottom: 4px; padding-top: 4px;"><span class="nobr">Amount</span></th></tr></thead>';
 		 $init=$this->getRequest()->getParam('init');
-		 $amt=$this->getRequest()->getParam('amt');
+		 if($checkout = Mage::getSingleton('checkout/session')){
+			$totals = $checkout->getQuote()->getTotals();
+			$amt = $totals["grand_total"]->getValue();
+		 }else{
+			$amt=$this->getRequest()->getParam('amt');
+		 }
 		 $currency = $this->getRequest()->getParam('currency');
 		 $dep=$amt*$init/100;
 		 $rest=number_format(($amt-$dep)/$mnth,2,'.','');

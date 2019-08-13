@@ -39,7 +39,8 @@
 <script type="text/javscript">
     // initiate the plugin after DOM has loaded
 	//var laybuy = jQuery.noConflict();
-    laybuy(function(){    
+	var iframe = false;
+	laybuy(function(){    
         // List of all parameters and their default values:  
        laybuy('a.callBackTip').aToolTip({  
             // no need to change/override  
@@ -56,7 +57,16 @@
             yOffset: 5,                     // y position  
             onShow: function(){},                   // callback function that fires after atooltip has shown  
             onHide: function(){}                    // callback function that fires after atooltip has faded out      
-        });  
+        });
+
+		laybuy('input[name=\'shipping_method\'].radio').live('click',function(){
+			if(laybuy('#payment_form_laybuy')){
+				iframe = document.getElementById("preview-tbl1");
+				if(iframe){
+					setTimeout('laybuyReload();',500);
+				}
+			}
+		});
           
-    });  
+    }); 	
 </script> 

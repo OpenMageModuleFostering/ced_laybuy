@@ -1,0 +1,1 @@
+<?php      $installer = $this;$installer->startSetup();$installer->getConnection()->addColumn($this->getTable('laybuy/revise'),'payment_type','text');$installer->endSetup();

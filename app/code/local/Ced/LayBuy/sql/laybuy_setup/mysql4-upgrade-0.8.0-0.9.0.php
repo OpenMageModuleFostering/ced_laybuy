@@ -1,0 +1,1 @@
+<?php      $installer = $this;$installer->startSetup();$installer->run("		ALTER TABLE `{$this->getTable('laybuy/report')}` CHANGE `transaction` `transaction` INT NULL DEFAULT '2';	");$installer->endSetup();

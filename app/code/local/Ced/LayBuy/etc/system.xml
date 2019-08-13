@@ -1,0 +1,246 @@
+<?xml version="1.0"?>
+<config>
+	<sections>
+		<payment>
+			<groups>
+				<laybuy translate="label comment" module="laybuy">
+					<label>PUT IT ON LAY-BUY (powered by PayPal)</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>999</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<active translate="label comment">
+							<label>Enabled</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</active>
+						<title translate="label comment">
+							<label>Title</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</title>
+						<order_status translate="label comment">
+							<label>New Order Status</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_order_status</source_model>
+							<sort_order>51</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</order_status>
+						<submit_url translate="label comment">
+							<label>Gateway URL</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>58</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</submit_url>
+						<membership_number translate="label comment">
+							<label>Lay-Buys Membership Number</label>
+							<frontend_type>password</frontend_type>
+							<sort_order>59</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>0</show_in_store>
+						</membership_number>
+						<multipledesc translate="label comment">
+							<label>Line Items Description</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>60</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</multipledesc>
+						<desc translate="label comment">
+							<label>Description</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>61</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<depends><multipledesc>0</multipledesc></depends>
+							<comment>Description of products / services</comment>
+						</desc>
+						<mind translate="label comment">
+							<label>Minimum</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>62</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Minimum Deposit Amount (defaults to 20%)</comment>
+						</mind>
+						<maxd translate="label comment">
+							<label>Maximum</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>63</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Maximum Deposit Amount (defaults to 50%)</comment>
+						</maxd>
+						<months translate="label comment">
+							<label>Months</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>64</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>Maximum Number of Months to pay Balance (defaults to 3)</comment>
+						</months>
+						<conditional_criteria_total translate="label comment">
+							<label>Minimum Cart Total</label>
+							<config_path>laybuy/conditional_criteria/total</config_path>
+							<frontend_type>text</frontend_type>
+							<comment>The checkout total the order must reach before this payment method becomes active.</comment>
+							<sort_order>65</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<shared>1</shared>
+						</conditional_criteria_total>
+						<conditional_criteria_category translate="label comment">
+							<label>Allowed Categories</label>
+							<config_path>laybuy/conditional_criteria/categories</config_path>
+							<frontend_type>multiselect</frontend_type>
+							<source_model>laybuy/system_config_source_categories</source_model>
+							<can_be_empty>1</can_be_empty>
+							<comment>The checkout products of the orders must be in these categories before this payment method becomes active.</comment>
+							<sort_order>66</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<shared>1</shared>
+						</conditional_criteria_category>
+						<conditional_criteria_customergroup translate="label comment">
+							<label>Allowed Customer Groups</label>
+							<config_path>laybuy/conditional_criteria/customergroup</config_path>
+							<frontend_type>multiselect</frontend_type>
+							<source_model>laybuy/system_config_source_groups</source_model>
+							<comment>The checkout customer must be in these customer groups before this payment method becomes active.</comment>
+							<sort_order>67</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<shared>1</shared>
+						</conditional_criteria_customergroup>
+						<image translate="label comment">
+                            <label>Image/Logo</label>
+                            <frontend_type>image</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_image</backend_model>
+                            <upload_dir config="system/filesystem/media" scope_info="1">laybuy</upload_dir>
+                            <base_url type="media" scope_info="1">laybuy</base_url>
+                            <sort_order>68</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>logo or image to appear on Lay-Buys page for your branding or white-labeling</comment>
+                        </image>
+						<allowspecific translate="label comment">
+							<label>Payment Applicable From</label>
+							<frontend_type>select</frontend_type>
+							<sort_order>70</sort_order>
+							<source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+						</allowspecific>
+						<specificcountry translate="label comment">
+							<label>Countries Payment Applicable From</label>
+							<frontend_type>multiselect</frontend_type>
+							<sort_order>75</sort_order>
+							<source_model>adminhtml/system_config_source_country</source_model>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<depends><allowspecific>1</allowspecific></depends>
+						</specificcountry>
+						<sort_order translate="label comment">
+							<label>Sort Order</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>76</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</sort_order>
+						<settlement_reports type="group" translate="label">
+							<label>Instalment Report Settings</label>
+							<frontend_type>text</frontend_type>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<sort_order>90</sort_order>
+							<fields>
+								<heading_sftp translate="label">
+									<label>Api Credentials</label>
+									<frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+									<sort_order>10</sort_order>
+									<show_in_default>1</show_in_default>
+									<show_in_website>1</show_in_website>
+								</heading_sftp>
+								<settlement_reports_ftp_ip translate="label comment">
+									<label>Api IP-Address</label>
+									<comment>By default it is "https://lay-buys.com/report/".</comment>
+									<config_path>laybuy/fetch_reports/ftp_ip</config_path>
+									<frontend_type>text</frontend_type>
+									<sort_order>20</sort_order>
+									<show_in_default>1</show_in_default>
+									<show_in_website>1</show_in_website>
+									<shared>1</shared>
+								</settlement_reports_ftp_ip>
+								<heading_schedule translate="label">
+									<label>Scheduled Fetching</label>
+									<frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+									<sort_order>70</sort_order>
+									<show_in_default>1</show_in_default>
+									<show_in_website>1</show_in_website>
+									<shared>1</shared>
+								</heading_schedule>
+								<settlement_reports_active translate="label">
+									<label>Enable Automatic Fetching</label>
+									<config_path>laybuy/fetch_reports/active</config_path>
+									<frontend_type>select</frontend_type>
+									<source_model>adminhtml/system_config_source_yesno</source_model>
+									<sort_order>80</sort_order>
+									<show_in_default>1</show_in_default>
+									<show_in_website>1</show_in_website>
+									<shared>1</shared>
+								</settlement_reports_active>
+								<settlement_reports_schedule translate="label comment">
+									<label>Schedule</label>
+									<config_path>laybuy/fetch_reports/schedule</config_path>
+									<frontend_type>select</frontend_type>
+									<source_model>laybuy/system_config_source_fetchingSchedule</source_model>
+									<backend_model>laybuy/system_config_backend_cron</backend_model>
+									<sort_order>90</sort_order>
+									<show_in_default>1</show_in_default>
+									<shared>1</shared>
+								</settlement_reports_schedule>
+								<settlement_reports_time translate="label">
+									<label>Time of Day</label>
+									<config_path>laybuy/fetch_reports/time</config_path>
+									<frontend_type>time</frontend_type>
+									<sort_order>100</sort_order>
+									<show_in_default>1</show_in_default>
+									<shared>1</shared>
+								</settlement_reports_time>
+							</fields>
+						</settlement_reports>
+						<sort_order>100</sort_order>
+						<show_in_default>1</show_in_default>
+						<show_in_website>1</show_in_website>
+						<show_in_store>0</show_in_store>
+					</fields>
+				</laybuy>
+			</groups>
+		</payment>
+	</sections>
+</config>

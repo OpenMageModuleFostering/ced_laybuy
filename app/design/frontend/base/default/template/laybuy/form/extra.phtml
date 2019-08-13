@@ -1,0 +1,73 @@
+<?php
+/**
+ * Lay-Buys
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @author 		Asheesh Singh<asheeshsingh@cedcoss.com>
+ * @copyright   Copyright LAY-BUYS (2011). (http://lay-buys.com/)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+?>
+<?php
+/**
+ * @see Ced_LayBuy_Block_Form_Laybuy
+ */
+?>
+<?php $_code=$this->getMethodCode() ?>
+<?php
+	$sessionPayment = Mage::getSingleton('checkout/session')->getQuote()->getPayment();
+	$customerOptions = $sessionPayment->getData('additional_information');
+
+	$totals = Mage::getSingleton('checkout/session')->getQuote()->getTotals();
+	$grandtotal = round($totals["grand_total"]->getValue());
+?>
+<ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
+    <li class="form-alt"><?php echo $this->getExtraMessage() ?></li>
+	<li>
+        <label for="<?php echo $_code ?>_init" class="required"><em>*</em><?php echo $this->__('Initial Payment') ?> : </label>
+        <div class="input-box">
+            <select onChange="document.getElementById('preview-tbl1').src = '<?php echo $this->getUrl('laybuy/standard/docalc'); ?>?currency=<?php echo  Mage::app()->getStore()->getCurrentCurrencyCode(); ?>&amt=<?php echo $grandtotal; ?>&init='+document.getElementById('<?php echo $_code ?>_init').value+'&mnth='+document.getElementById('<?php echo $_code ?>_months').value+'&rnd='+Math.random()+'&html=1';" id="<?php echo $_code ?>_init" name="payment[additional_information][INIT]" title="<?php echo $this->__('Initial Payment') ?>" class="required-entry">
+            <?php foreach ($this->getArray('dp_amount') as $_data): ?>
+                <option value="<?php echo $_data['value'] ?>" <?php if(isset($customerOptions['INIT']) && $customerOptions['INIT'] && $customerOptions['INIT']==$_data['value']){ ?> selected="selected" <?php } ?>><?php echo $_data['label'] ?></option>
+            <?php endforeach ?>
+            </select>
+        </div>
+    </li>
+	<li>
+        <label for="<?php echo $_code ?>_months" class="required"><em>*</em><?php echo $this->__('Months to Pay') ?> : </label>
+        <div class="input-box">
+            <select onChange="document.getElementById('preview-tbl1').src = '<?php echo $this->getUrl('laybuy/standard/docalc'); ?>?currency=<?php echo  Mage::app()->getStore()->getCurrentCurrencyCode(); ?>&amt=<?php echo $grandtotal; ?>&init='+document.getElementById('<?php echo $_code ?>_init').value+'&mnth='+document.getElementById('<?php echo $_code ?>_months').value+'&rnd='+Math.random()+'&html=1';" id="<?php echo $_code ?>_months" name="payment[additional_information][MONTHS]" title="<?php echo $this->__('Months to Pay') ?>" class="required-entry">
+            <?php $_recommendedMonth = isset($customerOptions['MONTHS'])?$customerOptions['MONTHS']:$this->getConfigData('months'); ?>
+            <?php foreach ($this->getArray('months') as $_data): ?>
+                <option value="<?php echo $_data['value'] ?>"<?php if($_data['value']==$_recommendedMonth): ?> selected="selected"<?php endif ?>><?php echo $_data['label'] ?></option>
+            <?php endforeach ?>
+            </select>
+        </div>
+    </li>
+	<li>
+        <label for="preview-tbl1"><?php echo $this->__('Plan Preview') ?></label>
+        <div class="input-box">
+            <iframe src="<?php echo $this->getUrl('laybuy/standard/docalc'); ?>?currency=<?php echo  Mage::app()->getStore()->getCurrentCurrencyCode(); ?>&amt=<?php echo $grandtotal; ?>&init=<?php echo $this->getConfigData('mind'); ?>&mnth=<?php echo $this->getConfigData('months'); ?>&html=1" name="preview-tbl1" id="preview-tbl1" style="width:225%; height:157px; border:0; margin:0; overflow:hidden" marginheight="0" marginwidth="0" noscroll></iframe>
+        </div>
+    </li>
+	<li>
+        <label for="preview-tbl12"><?php echo $this->__('Your goods/services will be delivered once your final payment has been received.') ?></label>
+    </li>
+</ul>

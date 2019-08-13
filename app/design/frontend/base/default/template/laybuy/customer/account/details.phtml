@@ -1,0 +1,138 @@
+<?php
+/**
+ * Lay-Buys
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @author 		Asheesh Singh<asheeshsingh@cedcoss.com>
+ * @copyright   Copyright LAY-BUYS (2011). (http://lay-buys.com/)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+?>
+<?php
+/**
+ * @see Ced_LayBuy_Block_Customer_Account_Details
+ */
+?>
+<style type="text/css">
+.grid table {
+    border-color: #CBD3D4 #CBD3D4 -moz-use-text-color;
+    border-image: none;
+    border-style: solid solid none;
+    border-width: 1px 1px medium;
+    width: 100%;
+}
+.grid tbody {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
+.grid tr.headings {
+    background: url("<?php echo Mage::getBaseUrl('skin'); ?>adminhtml/default/default/images/sort_row_bg.gif") repeat-x scroll 0 50% rgba(0, 0, 0, 0);
+}
+.grid tr.headings th.no-link {
+    color: #67767E;
+    padding-bottom: 1px;
+    padding-top: 2px;
+}
+.grid tr.headings th {
+    border-color: #F9F9F9 #D1CFCF #F9F9F9 #F9F9F9;
+    border-style: solid;
+    border-width: 1px;
+    font-size: 0.9em;
+	font-weight: bold;
+    padding-bottom: 0;
+    padding-top: 1px;
+}
+.grid th {
+    white-space: nowrap;
+}
+.grid tr.even, .grid tr.even tr {
+    background: none repeat scroll 0 0 #F6F6F6;
+}
+.grid table td {
+    border-color: #DADFE0;
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+}
+.grid th, .grid td {
+    padding: 2px 4px;
+}
+</style>
+<?php $_transaction = $this->getTransaction() ?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<div class="page-title title-buttons">
+    <h1><?php echo $this->__('View Transaction Details') ?></h1>
+</div>
+<div class="col2-set order-info-box">
+    <div class="col-11">
+        <div class="box">
+            <div class="box-title">
+                <h2><?php echo $this->__('Reference Information') ?></h2>
+            </div>
+            <div class="box-content">
+                <address>
+					<span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('paypal_profile_id'); ?></b></span>:&nbsp;<span><?php echo $_transaction->getData('paypal_profile_id'); ?></span><br style="clear: both;" />
+					<span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('laybuy_ref_no'); ?></b></span>:&nbsp;<span><?php echo $_transaction->getData('laybuy_ref_no'); ?></span><br style="clear: both;" />
+					<span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('order_id'); ?></b></span>:&nbsp;<span><?php echo $_transaction->getData('order_id'); ?></span><br style="clear: both;" />
+				</address>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col2-set order-info-box">
+    <div class="col-11">
+        <div class="box">
+            <div class="box-title">
+                <h2><?php echo $this->__('Payment Plan') ?></h2>
+            </div>
+            <div class="box-content">
+					<span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('status'); ?></b></span>:&nbsp;<span><?php echo $this->getTransactionStatusLabel($_transaction->getData('status')); ?></span><br style="clear: both;" />
+					<span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('amount'); ?></b></span>:&nbsp;<span><?php echo Mage::app()->getLocale()->currency($_transaction->getData('currency'))->toCurrency($_transaction->getData('amount')); ?></span><br style="clear: both;" />
+					<span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('downpayment'); ?></b></span>:&nbsp;<span><?php echo $_transaction->getData('downpayment'); ?></span><br style="clear: both;" />
+					<span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('months'); ?></b></span>:&nbsp;<span><?php echo $_transaction->getData('months'); ?></span><br style="clear: both;" />
+					<span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('downpayment_amount'); ?></b></span>:&nbsp;<span><?php echo Mage::app()->getLocale()->currency($_transaction->getData('currency'))->toCurrency($_transaction->getData('downpayment_amount')); ?></span><br style="clear: both;" />
+					<span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('payment_amounts'); ?></b></span>:&nbsp;<span><?php echo Mage::app()->getLocale()->currency($_transaction->getData('currency'))->toCurrency($_transaction->getData('payment_amounts')); ?></span><br style="clear: both;" />
+					<span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('first_payment_due'); ?></b></span>:&nbsp;<span><?php echo $this->helper('core')->formatDate($_transaction->getData('first_payment_due'), Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true); ?></span><br style="clear: both;" />
+					<span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('last_payment_due'); ?></b></span>:&nbsp;<span><?php echo $this->helper('core')->formatDate($_transaction->getData('last_payment_due'), Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true); ?></span><br style="clear: both;" />
+					<span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('report'); ?></b></span>:<br style="clear: both;" /><span><?php echo $_transaction->getData('report'); ?></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col3-set order-info-box">
+    <div class="col-11">
+        <div class="box">
+            <div class="box-title">
+                <h2><?php echo $this->__('Customer Information') ?></h2>
+            </div>
+            <div class="box-content">
+               <span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('firstname'); ?></b></span>:&nbsp;<span><?php echo $_transaction->getData('firstname'); ?></span><br style="clear: both;" />
+			   <span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('lastname'); ?></b></span>:&nbsp;<span><?php echo $_transaction->getData('lastname'); ?></span><br style="clear: both;" />
+			   <span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('email'); ?></b></span>:&nbsp;<span><?php echo $_transaction->getData('email'); ?></span><br style="clear: both;" />
+			   <span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('address'); ?></b></span>:&nbsp;<span><?php echo $_transaction->getData('address'); ?></span><br style="clear: both;" />
+			   <span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('suburb'); ?></b></span>:&nbsp;<span><?php echo $_transaction->getData('suburb'); ?></span><br style="clear: both;" />
+			   <span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('state'); ?></b></span>:&nbsp;<span><?php echo $_transaction->getData('state'); ?></span><br style="clear: both;" />
+			   <span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('country'); ?></b></span>:&nbsp;<span><?php echo $_transaction->getData('country'); ?></span><br style="clear: both;" />
+			   <span class="label" style="float: left; width: 150px;"><b><?php echo $_transaction->getFieldLabel('postcode'); ?></b></span>:&nbsp;<span><?php echo $_transaction->getData('postcode'); ?></span><br style="clear: both;" />
+			</div>
+        </div>
+    </div>
+</div>
+<div class="buttons-set">
+	<p class="back-link"><a href="<?php echo $this->getBackUrl() ?>"><small>&laquo; </small><?php echo $this->getBackTitle() ?></a></p>
+</div>

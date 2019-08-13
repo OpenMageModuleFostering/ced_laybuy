@@ -1,0 +1,13 @@
+<config>
+    <modules>
+		<Ced_LayBuy>
+			<active>true</active>
+            <codePool>local</codePool>
+			<!-- <depends>
+                <Mage_Paygate/>
+                <Mage_Checkout/>
+                <Mage_Sales/>
+            </depends> -->
+		</Ced_LayBuy>
+    </modules>
+</config>

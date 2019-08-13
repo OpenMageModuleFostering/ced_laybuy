@@ -1,0 +1,1 @@
+<?php      $installer = $this;$installer->startSetup();$installer->getConnection()->addColumn($this->getTable('laybuy/report'),'transaction','text');$installer->endSetup();

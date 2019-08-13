@@ -1,0 +1,95 @@
+<?php
+/**
+ * Lay-Buys
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @author 		Asheesh Singh<asheeshsingh@cedcoss.com>
+ * @copyright   Copyright LAY-BUYS (2011). (http://lay-buys.com/)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+?>
+<?php
+/**
+ * @see Ced_LayBuy_Block_Customer_Account_Grid
+ */
+?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php $_transactions = $this->getTransactions(); ?>
+<div class="page-title">
+    <h1><?php echo $this->__('My Instalment Plans') ?></h1>
+</div>
+<dl class="order-info">
+    <dt><?php echo $this->__('Order #%s - %s', $this->getOrderIncrementId(), $this->getOrderStatusLabel()) ?></dt>
+    <dd>
+    </dd>
+</dl>
+<?php echo $this->getPagerHtml(); ?>
+<?php if($_transactions->getSize()): ?>
+<table class="data-table" id="my-transactions-table">
+    <col width="1" />
+    <col width="1" />
+    <col width="1" />
+    <col width="1" />
+    <col width="1" />
+    <col width="1" />
+    <thead>
+        <tr>
+			<th><?php echo $this->__('Created At') ?></th>
+            <th><?php echo $this->__('Amount') ?></th>
+            <th><?php echo $this->__('Down Payment %') ?></th>
+			<th style="padding: 0px;"><?php echo $this->__('Months') ?></th>
+            <th><span class="nobr"><?php echo $this->__('First Payment Due') ?></span></th>
+            <th><span class="nobr"><?php echo $this->__('Last Payment Due') ?></span></th>
+            <th><span class="nobr"><?php echo $this->__('Status') ?></span></th>
+			<th><span class="nobr"><?php echo $this->__('Action') ?></span></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php $_odd = ''; ?>
+		<?php $statuses = Mage::helper('laybuy')->getStatuses(); ?>
+        <?php foreach ($_transactions as $_transaction): ?>
+			<?php 
+				$currency = '';
+				$currency = $_transaction->getCurrency();
+			?>
+        <tr>
+			<td><span class="nobr"><?php echo $this->helper('core')->formatDate($_transaction->getCreatedAt(), Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, false) ?></span></td>
+            <td><?php echo Mage::app()->getLocale()->currency($currency)->toCurrency($_transaction->getAmount()) ?></td>
+            <td class="a-center"><?php echo $_transaction->getDownpayment() ?></td>
+			<td class="a-center"><?php echo $_transaction->getMonths() ?></td>
+			<td class="a-center"><span class="nobr"><?php echo $this->helper('core')->formatDate($_transaction->getFirstPaymentDue(), Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, false) ?></span></td>
+			<td class="a-center"><span class="nobr"><?php echo $this->helper('core')->formatDate($_transaction->getLastPaymentDue(), Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, false) ?></span></td>
+			<td class="a-center"><em><?php echo $statuses[$_transaction->getStatus()] ?></em></td>
+			<td class="a-center">
+                <span class="nobr"><a href="<?php echo $this->getViewUrl($_transaction) ?>"><?php echo $this->__('View') ?></a>
+                </span>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<script type="text/javascript">decorateTable('my-transactions-table');</script>
+<?php echo $this->getPagerHtml(); ?>
+<?php else: ?>
+    <p><?php echo $this->__('You have not perform any transaction.'); ?></p>
+<?php endif ?>
+<div class="buttons-set">
+	<p class="back-link"><a href="<?php echo $this->getBackUrl() ?>"><small>&laquo; </small><?php echo $this->getBackTitle() ?></a></p>
+</div>

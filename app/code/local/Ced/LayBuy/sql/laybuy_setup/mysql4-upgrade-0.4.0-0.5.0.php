@@ -1,0 +1,1 @@
+<?php      $installer = $this;$installer->startSetup();$installer->getConnection()->addColumn($this->getTable('laybuy/report'),'paypal_profile_id','text');$installer->getConnection()->addColumn($this->getTable('laybuy/report'),'laybuy_ref_no','text');$installer->endSetup();

@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<default>
+		<reference name="head">
+			<action method="addJs"><script>laybuy/jquery.min.js</script></action>
+			<action method="addJs"><script>laybuy/jquery.atooltip.js</script></action>
+		</reference>
+	</default>
+	<checkout_onepage_review>
+		<reference name="checkout.onepage.review.button">
+			<action method="setTemplate">
+				<template>laybuy/checkout/onepage/review/button.phtml</template>
+			</action>
+			<!-- <block type="core/template" name="checkout.onepage.review.button1" as="button1" before="checkout.onepage.review.button" template="checkout/onepage/review/button1.phtml"/> -->
+		</reference>
+	</checkout_onepage_review>
+	<laybuy_onepage_success translate="label">
+		<!--<update handle="checkout_onepage_success"/>-->
+        <label>One Page Checkout Success</label>
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+        </reference>
+		<reference name="content">
+        	<block type="checkout/onepage_success" name="laybuy_success" before="checkout.success" template="laybuy/status.phtml"></block>
+        </reference>
+    </laybuy_onepage_success>
+	
+	<laybuy_report_details>
+		<update handle="customer_account"/>
+			<reference name="head">
+            <action method="setTitle" translate="title" module="customer"><title>View Transaction Details</title></action>
+        </reference>
+		<reference name="customer_account_navigation">
+			<action method="setActive" module="laybuy">
+				<path>sales/order/history</path>
+			</action>
+		</reference>
+        <reference name="my.account.wrapper">
+            <block type="laybuy/customer_account_details" name="transaction_details" template="laybuy/customer/account/details.phtml"/>
+        </reference>
+	</laybuy_report_details>
+	
+	<laybuy_report_grid>
+		<update handle="customer_account"/>
+		<reference name="head">
+            <action method="setTitle" translate="title" module="customer"><title>My Instalment Plans</title></action>
+        </reference>
+		<reference name="customer_account_navigation">
+			<action method="setActive" module="laybuy">
+				<path>sales/order/history</path>
+			</action>
+		</reference>
+        <reference name="my.account.wrapper">
+            <block type="laybuy/customer_account_grid" name="transaction_grid" template="laybuy/customer/account/grid.phtml"/>
+		</reference>
+	</laybuy_report_grid>
+</layout>

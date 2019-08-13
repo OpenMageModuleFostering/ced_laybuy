@@ -56,12 +56,12 @@ class Ced_LayBuy_Model_Standard extends Mage_Payment_Model_Method_Abstract
     {
         if ($status = parent::isAvailable($quote)) {
 	
-			$storeId = $quote->getStoreId();
+			$storeId = $quote ? $quote->getStoreId() : null;
 			
 			/* Condition for minimum checkout amount for method availability */
 			$configTotal = Mage::getStoreConfig('laybuy/conditional_criteria/total',$storeId);
-			$total = $quote->getData('grand_total');
-			if($status && $configTotal){
+			$total = $quote ? $quote->getData('grand_total') : 0;
+			if($total && $status && $configTotal){
 				if($configTotal<$total){
 					$status = true;
 				}else{
@@ -72,11 +72,13 @@ class Ced_LayBuy_Model_Standard extends Mage_Payment_Model_Method_Abstract
 			/* Condition for customer groups for method availability */
 			if($status){
 				$configCustomerGroupId = explode(',',Mage::getStoreConfig('laybuy/conditional_criteria/customergroup',$storeId ));
-				$customerGroupId = $quote->getData('customer_group_id');
-				if($configCustomerGroupId && in_array($customerGroupId,$configCustomerGroupId)){
-					$status = true;
-				}else{
-					$status = false;
+				$customerGroupId = $quote ? $quote->getData('customer_group_id'):-5;
+				if($customerGroupId != -5){
+					if($configCustomerGroupId && in_array($customerGroupId,$configCustomerGroupId)){
+						$status = true;
+					}else{
+						$status = false;
+					}
 				}
 			}	
 			
@@ -100,7 +102,7 @@ class Ced_LayBuy_Model_Standard extends Mage_Payment_Model_Method_Abstract
          if ($paymentInfo instanceof Mage_Sales_Model_Order_Payment) {
              $cartItems = $paymentInfo->getOrder()->getAllItems();
 			 $storeId 	= $paymentInfo->getOrder()->getStoreId();
-         } else {
+         } else { 
              $cartItems = $paymentInfo->getQuote()->getAllItems();
 			 $storeId 	= $paymentInfo->getQuote()->getStoreId();
          }

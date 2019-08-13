@@ -33,7 +33,7 @@
 	$customerOptions = $sessionPayment->getData('additional_information');
 	
 	$totals = Mage::getSingleton('checkout/session')->getQuote()->getTotals();
-	$grandtotal = round($totals["grand_total"]->getValue());
+	$grandtotal = $totals["grand_total"]->getValue();
 ?>
 	<?php if($method == 'laybuy'){ ?>
 	<br/>

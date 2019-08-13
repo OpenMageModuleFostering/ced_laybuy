@@ -209,8 +209,8 @@ class Ced_LayBuy_Helper_Data extends Mage_Core_Helper_Abstract{
 		$data .= "&mid=".Mage::getStoreConfig('payment/laybuy/membership_number',$storeId);
 		$data .= "&convrate=1";
 		$data .= "&id=".$revise->getId()."-".$revise->getOrderId();
-		$data .="&CANCELURL=".Mage::getBaseUrl().'laybuy/revise/cancel/';
-		$data .="&RETURNURL=".Mage::getBaseUrl().'laybuy/revise/success/';
+		$data .="&CANCELURL=".Mage::getUrl('laybuy/revise/cancel/',array('_secure'=>true));
+		$data .="&RETURNURL=".Mage::getUrl('laybuy/revise/success/',array('_secure'=>true));
 		$ch = curl_init();		
 		curl_setopt($ch, CURLOPT_URL,$url);		
 		curl_setopt($ch, CURLOPT_POST, 1);		

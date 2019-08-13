@@ -59,7 +59,7 @@ class Ced_LayBuy_ReviseController extends Mage_Core_Controller_Front_Action
 		}
 		$session = Mage::getSingleton('checkout/session');
 		try{
-			$currentDate = date('d-m-Y h:i:s',time());
+			$currentDate = date('Y-m-d h:i:s',time());
 			$status['_secure'] = true;
 			$str = print_r($status, true);
 			$revise = Mage::getModel('laybuy/revise')->load($status['merchants_ref_no']);

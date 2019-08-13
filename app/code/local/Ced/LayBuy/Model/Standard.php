@@ -33,7 +33,7 @@ class Ced_LayBuy_Model_Standard extends Mage_Payment_Model_Method_Abstract
 {
 	public $_code = 'laybuy';
 	protected $_formBlockType = 'laybuy/form_laybuy';
-	protected $_infoBlockType = 'laybuy/info_laybuy';
+	//protected $_infoBlockType = 'laybuy/info_laybuy';
 	protected $_isInitializeNeeded      = true;
 	protected $_canUseInternal          = false;
 	protected $_canUseForMultishipping  = false;

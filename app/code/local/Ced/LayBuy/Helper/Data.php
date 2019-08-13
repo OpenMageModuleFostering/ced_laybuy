@@ -49,7 +49,8 @@ class Ced_LayBuy_Helper_Data extends Mage_Core_Helper_Abstract{
 		$data .= "mid=".$config['username']."&";					
 		/* $data .= "custom=".$orderIds."&"; */
 		$data .= "profileIds=".$profileIds;
-		/*  echo $data;die;  */
+		/* $data .= "&test=1"; */
+		/*  echo $data;die; */
 		$ch = curl_init();					
 		curl_setopt($ch, CURLOPT_URL,$url);					
 		curl_setopt($ch, CURLOPT_POST, 1);					
@@ -58,7 +59,7 @@ class Ced_LayBuy_Helper_Data extends Mage_Core_Helper_Abstract{
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,false); /* tell cURL to graciously accept an SSL certificate */					
 		$result = curl_exec ($ch);					
 		curl_close ($ch);		
-		/* print_r($result); die; */
+		/* print_r(json_decode($result)); die; */
 		return json_decode($result);				
 	}
 	

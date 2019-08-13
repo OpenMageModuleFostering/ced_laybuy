@@ -98,15 +98,6 @@
 				<class>Ced_LayBuy_Block</class>
 			</laybuy>
 		</blocks>
-		<template>
-			<email>
-			<revise_plan_email_template module="Ced_LayBuy">
-				<label>Message from Lay-Buy Financial Solutions Pty Ltd</label>
-				<file>revise_plan_email_template.html</file>
-				<type>html</type>
-			</revise_plan_email_template>
-			</email>
-		</template>
 		<events>
             <payment_info_block_prepare_specific_information>
                 <observers>

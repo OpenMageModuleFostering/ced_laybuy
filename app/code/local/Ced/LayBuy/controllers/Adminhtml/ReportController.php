@@ -79,6 +79,15 @@ class Ced_LayBuy_Adminhtml_ReportController extends Mage_Adminhtml_Controller_Ac
      */
     public function fetchAction()
     {
+		/* $tomorrow  = mktime(0, 0, 0, date("m")  , date("d")+1, date("Y"));
+		echo date('Y-m-d h:i:s',$tomorrow);
+		echo "<br/>";
+		$nextmonth = mktime(0, 0, 0, date("m")+1, date("d"),   date("Y"));
+		echo date('Y-m-d h:i:s',$nextmonth);
+		echo "<br/>";
+		$nextyear  = mktime(0, 0, 0, date("m"),   date("d"),   date("Y")+1);
+		echo date('Y-m-d h:i:s',$nextyear);
+		die; */
 		try {
             $reports = Mage::getModel('laybuy/report');
             /* @var $reports Mage_laybuy_Model_Report_Instalment */

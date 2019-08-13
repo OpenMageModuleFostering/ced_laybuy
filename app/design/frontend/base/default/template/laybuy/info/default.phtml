@@ -40,6 +40,13 @@
 		</tbody>
 	</table>
 <?php else:?>
-	<p><?php echo $this->__('Payment Information not available.'); ?></p>
+	<p>
+		<?php 
+			$laybuy = $this->getInfo()->getAdditionalInformation();
+			echo "<b>Down Payment % : </b>".$laybuy['INIT'];
+			echo "<br/>";
+			echo "<b>Months : </b>".$laybuy['MONTHS'];
+		?>
+	</p>
 <?php endif;?>
 <?php echo $this->getChildHtml()?>

@@ -99,10 +99,12 @@ class Ced_LayBuy_Model_Standard extends Mage_Payment_Model_Method_Abstract
 		 $paymentInfo = $this->getInfoInstance();
          if ($paymentInfo instanceof Mage_Sales_Model_Order_Payment) {
              $cartItems = $paymentInfo->getOrder()->getAllItems();
+			 $storeId 	= $paymentInfo->getOrder()->getStoreId();
          } else {
              $cartItems = $paymentInfo->getQuote()->getAllItems();
+			 $storeId 	= $paymentInfo->getQuote()->getStoreId();
          }
-		 $flagArr = $this->canUseForCategories($cartItems);
+		 $flagArr = $this->canUseForCategories($cartItems, $storeId);
          if (!$flagArr[0]) {
              Mage::throwException(Mage::helper('laybuy')->__('Selected payment type is not allowed for '.$flagArr[1].' products.'));
          }
@@ -114,7 +116,7 @@ class Ced_LayBuy_Model_Standard extends Mage_Payment_Model_Method_Abstract
      *
      * @return bool
      */
-    public function canUseForCategories($cartItems = array())
+    public function canUseForCategories($cartItems = array(), $storeId=0)
     {
         /*
         for specific categories, the flag will set up as 1
@@ -122,10 +124,14 @@ class Ced_LayBuy_Model_Standard extends Mage_Payment_Model_Method_Abstract
 		$status = true;
 		$productName = '';
 		$configCategories = explode(',',Mage::getStoreConfig('laybuy/conditional_criteria/categories',$storeId ));
+		$xproducts = explode(',',Mage::getStoreConfig('laybuy/conditional_criteria/xproducts',$storeId));
 		if($configCategories){
 			foreach($cartItems as $_product){
 				$_product = Mage::getModel('catalog/product')->load($_product->getProductId());
-				if(count(array_intersect($_product->getCategoryIds(),$configCategories))==0){
+				if($xproducts && in_array($_product->getId(),$xproducts)){
+					$status = false;
+					$productName .= $_product->getName().',';
+				}elseif(count(array_diff($_product->getCategoryIds(),$configCategories))>0){
 					$status = false;
 					$productName .= $_product->getName().',';
 				}

@@ -48,7 +48,7 @@ class Ced_LayBuy_Block_Adminhtml_Report_Details extends Mage_Adminhtml_Block_Wid
             ->_removeButton('save');
 		$message = Mage::helper('laybuy')->__("Are you sure to cancel this transaction? Because it will cancel the buyer order and recurring profile");
 		$model = Mage::registry('current_laybuy_transaction');
-		if($model->getStatus()!=-1 && $model->getStatus()!=-2 && $model->getStatus()!=2){
+		if($model->getStatus() == 0){
 			$this->_addButton('delete', array(
 
 				'label'   => Mage::helper('laybuy')->__('Cancel Transaction'),

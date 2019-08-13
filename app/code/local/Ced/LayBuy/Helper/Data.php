@@ -140,7 +140,7 @@ class Ced_LayBuy_Helper_Data extends Mage_Core_Helper_Abstract{
 		}
 	}
 	
-	public function processOrder($orderIncrementId,$flag,$transactions,$profileId){
+	public function processOrder($orderIncrementId,$flag,$transactions = array() ,$profileId = ''){
 		$order = Mage::getModel('sales/order')->loadByIncrementId($orderIncrementId);
 		if ($order->getId()) {
 			if(!$flag){

@@ -13,6 +13,11 @@
 			</action>
 		</reference>
 	</checkout_onepage_review>
+	<laybuy_standard_docalc>
+		<block type="core/text_list" name="root" output="toHtml">
+			<block type="laybuy/standard_docalc" name="laybuy.standard.docalc"/>
+		</block>
+	</laybuy_standard_docalc>
 	<laybuy_report_details>
 		<update handle="customer_account"/>
 			<reference name="head">

@@ -4,5 +4,10 @@
 		<reference name="notifications">
             <block type="adminhtml/notification_window" name="notification_laybuy" as="notification_laybuy" acl="system/adminnotification/show_toolbar" template="laybuy/notification.phtml" />
         </reference>
-	</default>	
+	</default>
+	<laybuy_adminhtml_report_docalc>
+		<block type="core/text_list" name="root" output="toHtml">
+			<block type="laybuy/adminhtml_docalc" name="laybuy.adminhtml.docalc"/>
+		</block>
+	</laybuy_adminhtml_report_docalc>
 </layout>

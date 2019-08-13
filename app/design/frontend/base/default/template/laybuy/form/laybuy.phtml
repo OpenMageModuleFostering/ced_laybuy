@@ -36,7 +36,8 @@
 	$storeId=Mage::app()->getStore()->getId();
 	$adminFeeDescription = '';
 	if(Mage::getStoreConfig('payment/laybuy/adminfee',$storeId)) {
-		$adminFeeDescription = " A 0.9% admin fee is payable to Lay-Buys.";
+		//$adminFeeDescription = " A 0.9% admin fee is payable to Lay-Buys.";
+		$adminFeeDescription = " This payment option attracts a 0.9% surcharge.";
 	}
 	if(Mage::getStoreConfig('payment/laybuy/months',$storeId)) {
 		$paymentmonths=Mage::getStoreConfig('payment/laybuy/months',$storeId);

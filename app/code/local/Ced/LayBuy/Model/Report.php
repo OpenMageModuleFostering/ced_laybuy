@@ -53,6 +53,19 @@ class Ced_LayBuy_Model_Report extends Mage_Core_Model_Abstract
 	{
 		$this->_init('laybuy/report');
 	}
+	
+	public function isFetchRequire() {
+		if($this->getId() && $this->getStatus() == 0) {
+			$nextPaymentDate = $this->getFirstPaymentDue();
+			if($this->getTransaction() > 2) {
+				$nextPaymentDate = date("Y-m-d h:i:s", strtotime($this->getFirstPaymentDue() . " +".($this->getTransaction() - 2)." month"));
+			}
+			if(time() >= strtotime($nextPaymentDate)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
     /**
      * Goes to specified host/path and fetches reports from there.
@@ -67,8 +80,9 @@ class Ced_LayBuy_Model_Report extends Mage_Core_Model_Abstract
 		$helper = Mage::helper('laybuy');	
 		
 		$listing = $helper->fetchFromLaybuy($config);
-		
+		/* print_r($listing);die; */
 		foreach($listing as $orderId=>$reports){
+			$startIndex = 2;
 			$status = $reports->status;
 			$report = $reports->report;
 			/* print_r($status);
@@ -96,6 +110,7 @@ class Ced_LayBuy_Model_Report extends Mage_Core_Model_Abstract
 				$transaction->paymentDate = date('Y-m-d h:i:s', strtotime(str_replace('/','-',$transaction->paymentDate)));
 				$date = Mage::helper('core')->formatDate($transaction->paymentDate, Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true);
 				$nextPaymentDate = $transaction->paymentDate;
+				
 				if($transaction->type == 'd'){
 					$newStr .= '<tbody><tr class="even" ><td style="text-align: center;"> DP: </td><td style="text-align: center;"> '.Mage::app()->getLocale()
 								   ->currency($model->getData('currency'))
@@ -105,6 +120,9 @@ class Ced_LayBuy_Model_Report extends Mage_Core_Model_Abstract
 					  '<td style="text-align: center;"> '.$transaction->paymentStatus.' </td></tr>';
 					continue;
 				}elseif($transaction->type == 'p'){
+					if(strlen($transaction->txnID)>0) {
+						$startIndex++;
+					}
 					$pending_flag = true;
 					$newStr .= '<tr ';
 					if($month%2==0)
@@ -126,13 +144,15 @@ class Ced_LayBuy_Model_Report extends Mage_Core_Model_Abstract
 					
 				}
 				
+				
 			}
+			
 			//if($pending_flag)
-				$startIndex = $month+1;
+				//$startIndex = $month+1;
 			// else
 				// $startIndex = $month+2;
 			if($month<$months){
-				for($month=$startIndex;$month<=$months;$month++){
+				for($month=$month+1;$month<=$months;$month++){
 					$newStr .= '<tr ';
 					if($month%2==0)
 						$newStr .= 'class="even"';
@@ -157,7 +177,11 @@ class Ced_LayBuy_Model_Report extends Mage_Core_Model_Abstract
 						}
 						break;
 				case 0: if($helper->processOrder($orderId,2,$report,$profileId)){
-							$model->setStatus(0)->setReport($newStr)->setTransaction($startIndex)->save(); /* Processing */
+							$st = 0;
+							if($model->getStatus() == -2) {
+								$st = -2;
+							}
+							$model->setStatus($st)->setReport($newStr)->setTransaction($startIndex)->save(); /* Processing */
 							$fetched++;
 						}
 						break;

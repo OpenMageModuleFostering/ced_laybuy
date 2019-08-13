@@ -63,7 +63,11 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit extends Mage_Adminhtml_Block_Widget
 							->addFieldToFilter('type',array('eq'=>'new'))->getLastItem()->load();
 			if($revised && $revised->getId()){
 				$model = $revised;
-				$buttonLabel = Mage::helper('laybuy')->__('Resend Email to Buyer');
+				if(Mage::app()->getRequest()->getParam('reviseagain')) {
+					
+				} else {
+					$buttonLabel = Mage::helper('laybuy')->__('Resend Email to Buyer');
+				}
 			}
 		}
 		$this->_addButton('save', array(

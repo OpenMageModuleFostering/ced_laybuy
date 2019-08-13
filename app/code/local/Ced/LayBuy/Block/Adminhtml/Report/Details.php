@@ -58,15 +58,45 @@ class Ced_LayBuy_Block_Adminhtml_Report_Details extends Mage_Adminhtml_Block_Wid
 				'class'	  => 'delete',
 			));
 		}
-		if(in_array($model->getStatus(),array(-2,0))) {
-			$this->_addButton('edit', array(
-			
-				'label'    => Mage::helper('laybuy')->__('Revise Instalment Plan'),
+		if(in_array($model->getStatus(),array(-2))) {
+			$this->_addButton('resend', array(
+		
+				'label'    => Mage::helper('laybuy')->__('Resend Email to Buyer'),
 				
 				'onclick'  => "setLocation('{$this->getUrl('*/*/edit',array('_secure' => true,'id'=>$this->getRequest()->getParam('id')))}')",
 				
 				'class'	   => 'add',
 			));
+			$this->_addButton('edit', array(
+			
+					'label'    => Mage::helper('laybuy')->__('Revise Instalment Plan'),
+					
+					'onclick'  => "setLocation('{$this->getUrl('*/*/edit',array('_secure' => true,'id'=>$this->getRequest()->getParam('id'),'reviseagain'=>1))}')",
+					
+					'class'	   => 'add',
+				));
+		}
+		if(in_array($model->getStatus(),array(0))) {
+			if(strlen($model->getReviseConfirmMessage())>0) {
+				$this->_addButton('edit', array(
+				
+						'label'    => Mage::helper('laybuy')->__('Revise Instalment Plan'),
+						
+						'onclick'  => "confirmSetLocation('{$model->getReviseConfirmMessage()}', '{$this->getUrl('*/*/edit',array('_secure' => true,'id'=>$this->getRequest()->getParam('id')))}')",
+						
+						'class'	   => 'add',
+					));
+			} else {
+				$this->_addButton('edit', array(
+				
+						'label'    => Mage::helper('laybuy')->__('Revise Instalment Plan'),
+						
+						'onclick'  => "setLocation('{$this->getUrl('*/*/edit',array('_secure' => true,'id'=>$this->getRequest()->getParam('id')))}')",
+						
+						'class'	   => 'add',
+					));
+			}
+			
 		}
     }
 

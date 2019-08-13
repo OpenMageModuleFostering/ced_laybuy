@@ -32,6 +32,7 @@
  
 class Ced_LayBuy_Helper_Data extends Mage_Core_Helper_Abstract{
 
+	protected $_matchingData = null;
 	public function getStatuses(){
 		return array(
               '0' => $this->__("Pending"),
@@ -119,6 +120,9 @@ class Ced_LayBuy_Helper_Data extends Mage_Core_Helper_Abstract{
 	}
 	
 	public function getMatchingData(){
+		if($this->_matchingData != null) {
+			return $this->_matchingData;
+		}
 		$result = array();
 		$orderIds = '';
 		$profileIds = '';
@@ -287,12 +291,65 @@ class Ced_LayBuy_Helper_Data extends Mage_Core_Helper_Abstract{
 		}
 	}
 	
-	public function getPaidOrders() {
+	/*public function getPaidOrders() {
 		$code = Mage::getModel('laybuy/standard')->_code;
 		$collection = Mage::getResourceModel('sales/order_grid_collection');
 		$collection->join(array('payment'=>'sales/order_payment'),'main_table.entity_id=parent_id && main_table.status = "processing"','method');
 		$collection->join(array('order'=>'sales/order'),'payment.parent_id = order.entity_id','*');
 		$collection->addFieldToFilter('method',$code);
 		return $collection->getAllIds();
+	}*/
+	public function getPaidOrders() {
+				 $code = Mage::getModel('laybuy/standard')->_code;
+				 $collection = Mage::getResourceModel('sales/order_grid_collection');
+				 $paymentTable = Mage::getModel('core/resource')->getTableName("sales/order_payment");
+				 //$paymentTable =$collection->getTable("sales/order_payment");  
+				 //$orderTable = $collection->getTable("sales/order");
+				 $orderTable = Mage::getModel('core/resource')->getTableName("sales/order");
+				 $collection->getSelect()->join(
+				  		array('e1'=>$paymentTable),
+				  		'`e1`.`parent_id`=`main_table`.`entity_id` and `main_table`.`status`="processing"',
+				  		array('method')
+				  );
+				  //$collection->join($paymentTable,'`main_table`.`entity_id`=`'.$paymentTable.'`.`parent_id` && `main_table`.`status` = "processing"','method');
+			
+				  $collection->getSelect()->join(
+				  		array('e2'=>$orderTable),
+				  		'`e1`.`parent_id`=`e2`.`entity_id`',
+				  		array('*')
+				  );
+				  //$collection->join($orderTable,'`'.$paymentTable.'`.`parent_id` = '.$orderTable.'.entity_id','*');
+				  $collection->addFieldToFilter('method',$code);
+				  return $collection->getAllIds();
+		 }
+	public function fetchBeforeRevise($profileId = 0) {
+		if($profileId) {
+			$this->_matchingData = array('orderIds'=>'','profileIds'=>$profileId);
+			try {
+				$reports = Mage::getModel('laybuy/report');
+				/* @var $reports Mage_laybuy_Model_Report_Instalment */
+				$credentials = $reports->getApiCredentials();
+				if (empty($credentials)) {
+					return false;
+				}
+				foreach ($credentials as $config) {
+					try {
+						$fetched = $reports->fetchAndSave($config);
+						if($fetched){
+							return true;
+						}else{
+							return false;
+						}
+					} catch (Exception $e) {
+						return false;
+					}
+				}
+			} catch (Mage_Core_Exception $e) {
+				return false;
+			} catch (Exception $e) {
+				return false;
+			}
+		}
+		return false;
 	}
 }

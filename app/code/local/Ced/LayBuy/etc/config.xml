@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Ced_LayBuy>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 			<author>ASHEESH SINGH (asheeshsingh@cedcoss.com)</author>
 		</Ced_LayBuy>
 	</modules>
@@ -78,8 +78,19 @@
 				<class>Ced_LayBuy_Model</class>
 				<resourceModel>laybuy_mysql4</resourceModel>
 			</laybuy>
+			<directory_resource>
+				<rewrite>
+						<region_collection>Ced_LayBuy_Model_Resource_Region_Collection</region_collection>
+				</rewrite>
+			</directory_resource>
+			 <directory_mysql4>
+				<rewrite>
+						<region_collection>Ced_Laybuy_Model_Mysql4_Region_Collection</region_collection>
+				</rewrite>
+			</directory_mysql4>
 			<laybuy_mysql4>
 	            	<class>Ced_LayBuy_Model_Mysql4</class>
+	            	<deprecatedNode>laybuy_resource</deprecatedNode>
 	            	<entities>
 		                <report>
 		                    <table>laybuy_transaction_report</table>
@@ -87,6 +98,9 @@
 						<revise>
 		                    <table>laybuy_revise_request_report</table>
 		                </revise>
+		                <laybuyresp>
+		                    <table>laybuy_final_response</table>
+		                </laybuyresp>
 	            	</entities>
 		    </laybuy_mysql4>
 		</models>
@@ -99,6 +113,11 @@
 			</laybuy_setup>
    		</resources>
 		<helpers>
+			<customer>
+				<rewrite>
+					<address>Ced_LayBuy_Helper_Address</address>
+				</rewrite>
+			</customer>
 			<laybuy>
 				<class>Ced_LayBuy_Helper</class>
 			</laybuy>
@@ -150,6 +169,22 @@
 				<bypasslaybuy>1</bypasslaybuy>
 				<cronenabled>0</cronenabled>
 			</laybuy>
+			<laybuy_express>
+					<model>laybuy/express</model>
+					<active>1</active>
+					<title>Laybuy Express Checkout</title>
+					<payment_action>Authorization</payment_action>
+					<solution_type>Mark</solution_type>
+					<line_items_enabled>1</line_items_enabled>
+					<visible_on_cart>1</visible_on_cart>
+					<visible_on_product>1</visible_on_product>
+					<allow_ba_signup>never</allow_ba_signup>
+					<group>paypal</group>
+					<authorization_honor_period>3</authorization_honor_period>
+					<order_valid_period>29</order_valid_period>
+					<child_authorization_number>1</child_authorization_number>
+					<verify_peer>1</verify_peer>
+			</laybuy_express>		
 		</payment>
 		<laybuy>
 			<conditional_criteria>

@@ -62,16 +62,23 @@ class Ced_LayBuy_Adminhtml_ReportController extends Mage_Adminhtml_Controller_Ac
     public function detailsAction()
     {
         $rowId = $this->getRequest()->getParam('id');
+		$fbr = $this->getRequest()->getParam('fbr',0);
         $row = Mage::getModel('laybuy/report')->load($rowId);
         if (!$row->getId()) {
             $this->_redirect('*/*/',array('_secure' => true));
             return;
         }
-        Mage::register('current_laybuy_transaction', $row);
-        $this->_initAction()
-            ->_title($this->__('View Transaction'))
-            ->_addContent($this->getLayout()->createBlock('laybuy/adminhtml_report_details', 'laybuyInstalmentDetails'))
-            ->renderLayout();
+		$row->setReviseConfirmMessage('');
+		if($fbr && Mage::helper('laybuy')->fetchBeforeRevise($row->getData('paypal_profile_id'))) {
+			$row = Mage::getModel('laybuy/report')->load($row->getId());
+		} elseif($fbr) {
+			$row->setReviseConfirmMessage(Mage::helper('laybuy')->__("Are you sure to Revise Instalment Plan because instalment reports are not up-to-date."));
+		}
+		Mage::register('current_laybuy_transaction', $row);
+		$this->_initAction()
+			->_title($this->__('View Transaction'))
+			->_addContent($this->getLayout()->createBlock('laybuy/adminhtml_report_details', 'laybuyInstalmentDetails'))
+			->renderLayout();
     }
 
     /**

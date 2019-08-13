@@ -34,13 +34,12 @@ class Ced_LayBuy_Block_Adminhtml_Orders_Grid extends Mage_Adminhtml_Block_Widget
 
     public function __construct()
     {
-       
+		parent::__construct();
         $this->setId('sales_laybuy_order_grid');
-        $this->setUseAjax(true);
         $this->setDefaultSort('created_at');
         $this->setDefaultDir('ASC');
         $this->setSaveParametersInSession(true);
-		parent::__construct();
+		$this->setUseAjax(true);	
     }
 
     /**

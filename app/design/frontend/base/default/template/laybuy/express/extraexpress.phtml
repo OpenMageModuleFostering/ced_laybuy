@@ -1,0 +1,154 @@
+<?php
+/**
+ * Lay-Buys
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @author 		Asheesh Singh<asheeshsingh@cedcoss.com>
+ * @copyright   Copyright LAY-BUYS (2011). (http://lay-buys.com/)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+?>
+<?php
+/**
+ * @see Ced_LayBuy_Block_Form_Laybuy
+ */
+?>
+
+<?php
+	$storeId=Mage::app()->getStore()->getId();
+	$adminFeeDescription = '';
+	if(Mage::getStoreConfig('payment/laybuy/adminfee',$storeId)) {
+		//$adminFeeDescription = " A 0.9% admin fee is payable to Lay-Buys.";
+		$adminFeeDescription = " This payment option attracts a 0.9% surcharge.";
+	}
+	if(Mage::getStoreConfig('payment/laybuy/months',$storeId)) {
+		$paymentmonths=Mage::getStoreConfig('payment/laybuy/months',$storeId);
+	}
+	
+	
+?>
+
+<link media="all" rel="stylesheet" href="<?php echo Mage::getBaseUrl('skin'); ?>frontend/base/default/css/laybuy/tooltip.css" type="text/css">
+<?php
+	$sessionPayment = Mage::getSingleton('checkout/session')->getQuote()->getPayment();
+	$customerOptions = Mage::helper('laybuy')->getInstalmentData($sessionPayment);
+	/* $customerOptions['INIT'] = $sessionPayment->getData('laybuy_init');
+	$customerOptions['MONTHS'] = $sessionPayment->getData('laybuy_months'); */
+
+	$totals = Mage::getSingleton('checkout/session')->getQuote()->getTotals();
+	$grandtotal = $totals["grand_total"]->getValue();
+?>
+<form method="post" action="<?php echo Mage::getBaseUrl();?>laybuy/express/form">
+	<div class="fieldset">
+		<ul class="form-list" id="payment_form" style="display:block;">
+		   <li class="form-alt"><h2 class="legend"><?php echo $this->getExtraMessage() ?></h2></li>
+		   
+			<li>
+		        <label for="init" class="required"><em>*</em><?php echo $this->__('Initial Payment') ?> : </label>
+		        <div class="input-box">
+		            <select onChange="document.getElementById('preview-tbl1').src = '<?php echo $this->getUrl('laybuy/standard/docalc',array('_secure'=>true)); ?>?currency=<?php echo  Mage::app()->getStore()->getCurrentCurrencyCode(); ?>&amt=<?php echo $grandtotal; ?>&init='+document.getElementById('init').value+'&mnth='+document.getElementById('months').value+'&rnd='+Math.random()+'&html=1';" id="init" name="payment[laybuy_init]" title="<?php echo $this->__('Initial Payment') ?>" class="required-entry">
+		            <?php foreach ($this->getArray('dp_amount') as $_data): ?>
+		                <option value="<?php echo $_data['value'] ?>" <?php if(isset($customerOptions['INIT']) && $customerOptions['INIT'] && $customerOptions['INIT']==$_data['value']){ ?> selected="selected" <?php } ?>><?php echo $_data['label'] ?></option>
+		            <?php endforeach ?>
+		            </select>
+		        </div>
+		    </li>
+			<li>
+		        <label for="months" class="required"><em>*</em><?php echo $this->__('Months to Pay') ?> : </label>
+		        <div class="input-box">
+		            <select onChange="document.getElementById('preview-tbl1').src = '<?php echo $this->getUrl('laybuy/standard/docalc',array('_secure'=>true)); ?>?currency=<?php echo  Mage::app()->getStore()->getCurrentCurrencyCode(); ?>&amt=<?php echo $grandtotal; ?>&init='+document.getElementById('init').value+'&mnth='+document.getElementById('months').value+'&rnd='+Math.random()+'&html=1';" id="months" name="payment[laybuy_months]" title="<?php echo $this->__('Months to Pay') ?>" class="required-entry">
+		            <?php $_recommendedMonth = isset($customerOptions['MONTHS']) && $customerOptions['MONTHS']?$customerOptions['MONTHS']:$this->getConfigData('months'); ?>
+		            <?php foreach ($this->getArray('months') as $_data): ?>
+		                <option value="<?php echo $_data['value'] ?>"<?php if($_data['value']==$_recommendedMonth): ?> selected="selected"<?php endif ?>><?php echo $_data['label'] ?></option>
+		            <?php endforeach ?>
+		            </select>
+		        </div>
+		    </li>
+			<li>
+		        <label for="preview-tbl1"><?php echo $this->__('Plan Preview') ?></label>
+		        <div id="preview-tbl1-wrapper" class="input-box" style="width:100% !important">
+		            <iframe src="<?php echo $this->getUrl('laybuy/standard/docalc',array('_secure'=>true)); ?>?currency=<?php echo  Mage::app()->getStore()->getCurrentCurrencyCode(); ?>&amt=<?php echo $grandtotal; ?>&init=<?php if(isset($customerOptions['INIT']) && $customerOptions['INIT']){ $a=$customerOptions['INIT'];$b=trim($a,"%");echo $b; } else { $c=$this->getConfigData('mind');$d=trim($c,"%");echo $d; } ?>&mnth=<?php echo $_recommendedMonth; ?>&html=1" name="preview-tbl1" id="preview-tbl1" style="width:100%; height:120px; border:0; margin:0; overflow:hidden" marginheight="0" marginwidth="0" noscroll></iframe>
+				
+				</div>
+		    </li>
+		    
+		    <li>
+		    	<div class="buttons-set" style="margin-top: 0px; text-align:left;">
+		    		  <label for="preview-tbl12"><?php echo $this->__('* Here initial Down-Payment and Lay-Buy Installment Plan excludes the shipping.') ?></label>
+           			<br> <label for="preview-tbl12"><?php echo $this->__('Your goods/services will be delivered once your final payment has been received.') ?></label>
+           			<p class="required">* Required Fields</p>
+           			 <button class="button" title="Continue" type="submit"><span><span>Continue</span></span></button>
+           			<label style="float: right ! important; padding-top: 6px;">
+		    				<a  class="callBackTip" title="<?php echo Mage::helper('laybuy')->__('Lay-Buy is an affordable payment plan option that allows you to pay-off a product or service via one down payment, with the balance paid over')?>
+ <?php 
+	$secondlast=$paymentmonths-1;
+	for($i=1;$i<=$paymentmonths;$i++){  
+
+		echo $i;
+		if($i==$paymentmonths){
+		}
+		else{
+			 if($i==$secondlast){ 
+			echo " ";	
+			 }
+		else{
+			 echo ",";	
+			 }
+			  
+		}
+
+		if($i==$secondlast){
+			  echo "or"." ";
+		}
+     
+	}
+ 
+ ?>
+ <?php echo Mage::helper('laybuy')->__('monthly instalments. Your purchase is delivered to you after the final instalment payment is completed.'.$adminFeeDescription) ?>">
+<?php echo Mage::helper('laybuy')->__('What is LAY-BUY?') ?></a></label>
+			<script type="text/javascript">
+					laybuy(function(){    
+				        // List of all parameters and their default values:  
+								       laybuy('a.callBackTip').aToolTip({  
+								            // no need to change/override  
+								            closeTipBtn: 'aToolTipCloseBtn',  
+								            toolTipId: 'aToolTip',  
+								            // ok to override  
+								            fixed: false,                   // Set true to activate fixed position  
+								            clickIt: true,                 // set to true for click activated tooltip  
+								            inSpeed: 200,                   // Speed tooltip fades in  
+								            outSpeed: 100,                  // Speed tooltip fades out  
+								            tipContent: '<?php echo Mage::helper('laybuy')->__('Lay-Buy is an affordable payment plan option that allows you to pay-off a product or service via one down payment, with the balance paid over 1, 2 or 3 monthly instalments. Your purchase is delivered to you after the final instalment payment is completed.'.$adminFeeDescription) ?>',                 // Pass in content or it will use objects 'title' attribute  
+								            toolTipClass: 'defaultTheme',   // Set class name for custom theme/styles  
+								            xOffset: 5,                     // x position  
+								            yOffset: 5,                     // y position  
+								            onShow: function(){},                   // callback function that fires after atooltip has shown  
+								            onHide: function(){}                    // callback function that fires after atooltip has faded out      
+								        });
+				
+						
+				          
+				    }); 	
+	</script> 
+		</div>
+		    </li>
+		</ul>
+	</div>	
+</form>

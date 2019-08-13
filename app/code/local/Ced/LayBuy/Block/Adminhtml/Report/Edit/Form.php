@@ -44,6 +44,7 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit_Form extends Mage_Adminhtml_Block_W
 		$model = Mage::registry('current_laybuy_transaction_edit');
 		$newAmount = $model->getData('amount') - ($model->getData('downpayment_amount') + (((int)$model->getTransaction() - 2) * $model->getData('payment_amounts')));
 		$isRevised = 0;
+		$reviseagain = 0;
 		if($model->getStatus() == -2) {
 			$revised = Mage::getModel('laybuy/revise')->getCollection()
 							->addFieldToFilter('transaction_id',array('eq'=>$model->getId()))
@@ -52,8 +53,13 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit_Form extends Mage_Adminhtml_Block_W
 				$model = $revised;
 				$newAmount = $model->getData('amount');
 				$isRevised = $model->getId();
+				$reviseagain = $isRevised;
+				if(Mage::app()->getRequest()->getParam('reviseagain')){
+					$isRevised = 0;
+				}
 			}	
 		}
+		
 		
 		/* print_r($model->getData());die; */
         /* @var $model Mage_Paypal_Model_Report_Settlement_Row */
@@ -119,15 +125,17 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit_Form extends Mage_Adminhtml_Block_W
                         'value' => 1,
 						'type'	=> 'radio',
 						'onclick'=> 'methodChange(1)',
-					
-						!$isRevised || ($isRevised && $model->getPaymentType())?'checked':'' => !$isRevised || ($isRevised && $model->getPaymentType())?'checked':'',
+						
+						!$reviseagain || ($reviseagain && $model->getPaymentType())?'checked':'' => !$reviseagain || ($reviseagain && $model->getPaymentType())?'checked':'',
+						//!$isRevised || ($isRevised && $model->getPaymentType())?'checked':'' => !$isRevised || ($isRevised && $model->getPaymentType())?'checked':'',
 						'after_element_html' => '<label for="lay-buy" class="inline">Lay-Buy</label>',
                     ),
 					'buy-now' => array(
                         'label' => $settlement->getFieldLabel(''),
                         'value' => 0,
 						'type'	=> 'radio',
-						($isRevised && !$model->getPaymentType())?'checked':'' => ($isRevised && !$model->getPaymentType())?'checked':'',
+						($reviseagain && !$model->getPaymentType())?'checked':'' => ($reviseagain && !$model->getPaymentType())?'checked':'',
+						//($isRevised && !$model->getPaymentType())?'checked':'' => ($isRevised && !$model->getPaymentType())?'checked':'',
 						'onclick'=> 'methodChange(0)',
 						'after_element_html' => '<label for="buy-now" class="inline">Buy-Now</label>',
                     ),
@@ -287,9 +295,16 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit_Form extends Mage_Adminhtml_Block_W
 					
 				}
 				if(isset($info['dy']) && isset($info['onchange']) && $function = $info['onchange']){
-					
-					if ($isRevised && !$model->getPaymentType()) {
-						$funtionData = 'methodChange(0);document.getElementById("buy-now").checked = true;';
+					$buyNowData = '';
+					if ($reviseagain && !$model->getPaymentType()) {
+						$buyNowData = 'setTimeout("document.getElementById(\"buy-now\").checked = true;methodChange(0);",200);';
+						$funtionData = '
+									document.getElementById("loading-mask").show();
+									var f = document.getElementById("preview-tbl");
+								    f.src = "'.$calcUrl.'?currency="+document.laybuy_revise_plan.currency.value+"&amt="+document.laybuy_revise_plan.amount.value+"&init="+document.laybuy_revise_plan.dp_amount.value+"&mnth="+document.laybuy_revise_plan.months.value+"&rnd="+Math.random()+"&html=1";
+									
+									data = "'.$calcUrl.'?currency="+document.laybuy_revise_plan.currency.value+"&amt="+document.laybuy_revise_plan.amount.value+"&init="+document.laybuy_revise_plan.dp_amount.value+"&mnth="+document.laybuy_revise_plan.months.value+"&rnd="+Math.random();
+									loadXMLDoc(data);';
 					} else {
 						$funtionData = 'document.getElementById("lay-buy").checked = true;
 									document.getElementById("loading-mask").show();
@@ -303,8 +318,10 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit_Form extends Mage_Adminhtml_Block_W
 					   '<script type="text/javascript">
 							  function '.$function.'{
 								'.$funtionData.'
-							  } 
-							  setTimeout("'.$function.';",200);
+							  }
+							  
+							  '.$buyNowData.'
+							  setTimeout("'.$function.';",300);
 							  function loadXMLDoc(url)
 								{
 									var xmlhttp;

@@ -49,8 +49,10 @@ class Ced_LayBuy_Model_Observer
         $transaction = $observer->getEvent()->getTransaction();
         $transport = $observer->getEvent()->getTransport();
 		
-		foreach($transaction as $txn){
-			$transport->setData($txn->getFieldLabel('Instalment Plan')."-".$txn->getId(),$txn->getReport());
+		if($transaction && count($transaction)){
+			foreach($transaction as $txn){
+				$transport->setData($txn->getFieldLabel('Instalment Plan')."-".$txn->getId(),$txn->getReport());
+			}
 		}
 		
         return $this;
@@ -93,15 +95,17 @@ class Ced_LayBuy_Model_Observer
             $reports = Mage::getModel('laybuy/report');
             /* @var $reports Mage_LayBuy_Model_Report */
             $credentials = $reports->getApiCredentials(true);
-            foreach ($credentials as $config) {
-                try {
-                    $fetched = $reports->fetchAndSave($config);
-					Mage::log('Success!! Cron response {{Total '.$fetched.' rows fetched at date:'.date('Y-m-d h:i:s',time()).' }}',null,'laybuy_cron.log');
-                } catch (Exception $e) {
-					Mage::log('Failure1!! Cron response {{Exception: '.$e->getMessage().'Date:'.date('Y-m-d h:i:s',time()).' }}',null,'laybuy_cron.log');
-                    Mage::logException($e);
-                }
-            }
+			if($credentials && count($credentials)){
+				foreach ($credentials as $config) {
+					try {
+						$fetched = $reports->fetchAndSave($config);
+						Mage::log('Success!! Cron response {{Total '.$fetched.' rows fetched at date:'.date('Y-m-d h:i:s',time()).' }}',null,'laybuy_cron.log');
+					} catch (Exception $e) {
+						Mage::log('Failure1!! Cron response {{Exception: '.$e->getMessage().'Date:'.date('Y-m-d h:i:s',time()).' }}',null,'laybuy_cron.log');
+						Mage::logException($e);
+					}
+				}
+			}
         } catch (Exception $e) {
 			Mage::log('Failure2!! Cron response {{Exception: '.$e->getMessage().'Date:'.date('Y-m-d h:i:s',time()).' }}',null,'laybuy_cron.log');
             Mage::logException($e);

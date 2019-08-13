@@ -134,7 +134,7 @@ class Ced_LayBuy_ReviseController extends Mage_Core_Controller_Front_Action
 				$model = Mage::getModel('laybuy/report')->setData($status)														
 														->setOrderId($status['custom'])														
 														->setStoreId($order->getStoreId())														
-														->setCreatedAt($createdAt)														
+														->setCreatedAt($currentDate)														
 														->setStatus($state)														
 														->setReport($newStr)														
 														/* ->setTransaction(0) */														

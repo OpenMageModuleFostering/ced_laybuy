@@ -8,7 +8,16 @@
 					</children>
 				</salesroot>
 			</children>
-		</report>		
+		</report>
+		<sales>
+			<children>
+				<laybuyorders module="laybuy" translate="title">
+					<title>Lay-Buy Orders</title>
+					<action>laybuy/adminhtml_orders</action>
+					<sort_order>20</sort_order> 
+				</laybuyorders>
+			</children>
+		</sales>
 	</menu>
 	<acl>
 		<resources>			<all>				<title>Allow Everything</title>

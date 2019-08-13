@@ -286,4 +286,13 @@ class Ced_LayBuy_Helper_Data extends Mage_Core_Helper_Abstract{
 			return false;
 		}
 	}
+	
+	public function getPaidOrders() {
+		$code = Mage::getModel('laybuy/standard')->_code;
+		$collection = Mage::getResourceModel('sales/order_grid_collection');
+		$collection->join(array('payment'=>'sales/order_payment'),'main_table.entity_id=parent_id && main_table.status = "processing"','method');
+		$collection->join(array('order'=>'sales/order'),'payment.parent_id = order.entity_id','*');
+		$collection->addFieldToFilter('method',$code);
+		return $collection->getAllIds();
+	}
 }

@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 /**
  * Lay-Buys
@@ -19,22 +19,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     default_default
+ * @category    Ced
+ * @package     Ced_LayBuy
  * @author 		Asheesh Singh<asheeshsingh@cedcoss.com>
  * @copyright   Copyright LAY-BUYS (2011). (http://lay-buys.com/)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
- ?>
-<?php if(count(Mage::helper('laybuy')->getPaidOrders())) { ?>
-<div class="notification-global">	
-	<strong class="label">Congratulations: You have  <span class="critical"><strong><?php echo count(Mage::helper('laybuy')->getPaidOrders()); ?></strong></span> full paid Lay-Buy Orders.</strong>
-	<a href="<?php echo Mage::helper("adminhtml")->getUrl("laybuy/adminhtml_orders/",array('_secure'=>true)); ?>">Go to Lay-Buys Orders Panel</a>.
-</div>
-<?php } ?>
-<?php if(!Mage::getStoreConfig('payment/laybuy/cronenabled') && Mage::getStoreConfig('laybuy/fetch_reports/active')) { ?>
-<div class="notification-global">	
-	<strong class="label">Cron must be enabled for "Automated Fetch Updates".</strong>
-	Click here to go to	<a href="<?php echo Mage::helper("adminhtml")->getUrl("laybuy/adminhtml_report/",array('_secure'=>true)); ?>">Lay-Buys Instalment Reports</a>.
-</div>
-<?php } ?>
+/**
+ * Block for LayBuy orders
+ */
+class Ced_LayBuy_Block_Adminhtml_Orders extends Mage_Adminhtml_Block_Widget_Grid_Container
+{
+	public function __construct() {
+        $this->_controller = 'adminhtml_orders';
+		$this->_blockGroup = 'laybuy';
+        $this->_headerText = Mage::helper('sales')->__('Lay-Buy Orders');
+        parent::__construct();
+        $this->_removeButton('add');
+    }
+}

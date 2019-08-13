@@ -31,52 +31,18 @@
  * @see Mage_Core_Block_Template
  */
 ?>
-
 <?php
 	$storeId=Mage::app()->getStore()->getId();
 	$adminFeeDescription = '';
 	if(Mage::getStoreConfig('payment/laybuy/adminfee',$storeId)) {
 		$adminFeeDescription = " A 0.9% admin fee is payable to Lay-Buys.";
 	}
-	if(Mage::getStoreConfig('payment/laybuy/months',$storeId)) {
-		$paymentmonths=Mage::getStoreConfig('payment/laybuy/months',$storeId);
-	}
-	
-	
 ?>
-
 <link media="all" rel="stylesheet" href="<?php echo Mage::getBaseUrl('skin'); ?>frontend/base/default/css/laybuy/tooltip.css" type="text/css">
 <!--<script type="text/javascript" src="<?php //echo Mage::getBaseUrl('js'); ?>laybuy/jquery.min.js"></script>  
 <script type="text/javascript" src="<?php //echo Mage::getBaseUrl('js'); ?>laybuy/jquery.atooltip.js"></script>-->
 <img src="<?php echo $this->escapeHtml($this->getPaymentAcceptanceMarkSrc())?>" alt="<?php echo Mage::helper('laybuy')->__('LAY-BUY') ?>" title="<?php echo $this->escapeHtml($this->getLayBuyTitle()) ?>" class="v-middle" />&nbsp;
-
-<a href="#" class="callBackTip" title="<?php echo Mage::helper('laybuy')->__('Lay-Buy is an affordable payment plan option that allows you to pay-off a product or service via one down payment, with the balance paid over')?>
- <?php 
-	$secondlast=$paymentmonths-1;
-	for($i=1;$i<=$paymentmonths;$i++){  
-
-		echo $i;
-		if($i==$paymentmonths){
-		}
-		else{
-			 if($i==$secondlast){ 
-			echo " ";	
-			 }
-		else{
-			 echo ",";	
-			 }
-			  
-		}
-
-		if($i==$secondlast){
-			  echo "or"." ";
-		}
-     
-	}
- 
- ?>
- <?php echo Mage::helper('laybuy')->__('monthly instalments. Your purchase is delivered to you after the final instalment payment is completed.'.$adminFeeDescription) ?>">
-<?php echo Mage::helper('laybuy')->__('What is LAY-BUY?') ?></a>
+<a href="#" class="callBackTip" title="<?php echo Mage::helper('laybuy')->__('Lay-Buy is an affordable payment plan option that allows you to pay-off a product or service via one down payment, with the balance paid over 1, 2 or 3 monthly instalments. Your purchase is delivered to you after the final instalment payment is completed.'.$adminFeeDescription) ?>"><?php echo Mage::helper('laybuy')->__('What is LAY-BUY?') ?></a>
 <script type="text/javscript">
     // initiate the plugin after DOM has loaded
 	//var laybuy = jQuery.noConflict();

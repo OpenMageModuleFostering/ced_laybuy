@@ -338,4 +338,14 @@ class Ced_LayBuy_Adminhtml_ReportController extends Mage_Adminhtml_Controller_Ac
 		);
 	}
 	
+	public function ordersAction() {
+		$this->_title($this->__('Sales'))->_title(Mage::helper('laybuy')->__('Lay-Buy Orders'));
+        $this->loadLayout()
+            ->_setActiveMenu('sales/laybuyorders')
+            ->_addBreadcrumb($this->__('Sales'), Mage::helper('laybuy')->__('Sales'))
+            ->_addBreadcrumb(Mage::helper('laybuy')->__('Lay-Buy Orders'), Mage::helper('laybuy')->__('Lay-Buy Orders'))
+			->_addContent($this->getLayout()->createBlock('laybuy/adminhtml_orders'))
+            ->renderLayout();
+	}
+	
 }

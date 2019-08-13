@@ -36,7 +36,7 @@
 	$customerOptions = $sessionPayment->getData('additional_information');
 
 	$totals = Mage::getSingleton('checkout/session')->getQuote()->getTotals();
-	$grandtotal = round($totals["grand_total"]->getValue());
+	$grandtotal = $totals["grand_total"]->getValue();
 ?>
 <ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
     <li class="form-alt"><?php echo $this->getExtraMessage() ?></li>

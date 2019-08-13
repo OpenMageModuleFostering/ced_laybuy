@@ -31,7 +31,7 @@
  */
 ?>
 <p><strong><?php echo $this->htmlEscape($this->getMethod()->getTitle()) ?></strong></p>
-<?php if ($_specificInfo = $this->getSpecificInformation() && $this->getRequest()->getModuleName()=='customer'):?>
+<?php if($_specificInfo = $this->getSpecificInformation() && $this->getRequest()->getModuleName()=='sales' && $this->getRequest()->getControllerName()=='order' && $this->getRequest()->getActionName()=='view'):?>
 		<table>
 			<tbody>
 				<tr>
@@ -48,5 +48,5 @@
 			echo "<b>Months : </b>".$laybuy['MONTHS'];
 		?>
 	</p>
-<?php endif;?>
+<?php endif; ?>
 <?php echo $this->getChildHtml()?>

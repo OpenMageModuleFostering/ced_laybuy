@@ -39,7 +39,7 @@
     <?php foreach ($_specificInfo as $_label => $_value):?>
 		<?php $_label = explode('-',$_label); ?>
         <tr>
-            <th><strong><a target="_blank" href="<?php echo $this->getUrl('laybuy/adminhtml_report/details',array('id'=>$_label[1])); ?>" ><?php if($cnt!=1){ echo Mage::helper('laybuy')->__('Revised Instalment Plan').($cnt-1); }else{ echo $this->escapeHtml($_label[0]); } $cnt++; ?></a>:</strong></th>
+            <th><strong><a target="_blank" href="<?php echo Mage::helper('adminhtml')->getUrl('laybuy/adminhtml_report/details',array('_secure' => true,'id'=>$_label[1])); ?>" ><?php if($cnt!=1){ echo Mage::helper('laybuy')->__('Revised Instalment Plan').($cnt-1); }else{ echo $this->escapeHtml($_label[0]); } $cnt++; ?></a>:</strong></th>
         </tr>
         <tr>
             <td><?php echo $_value; ?></td>

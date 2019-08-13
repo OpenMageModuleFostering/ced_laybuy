@@ -359,6 +359,7 @@ class Ced_LayBuy_StandardController extends Mage_Core_Controller_Front_Action
 		$header .= '<head>';
 		$header .= '<link media="all" href="'.Mage::getBaseUrl('skin').'adminhtml/default/default/reset.css" type="text/css" rel="stylesheet">';
 		$header .= '<link media="all" href="'.Mage::getBaseUrl('skin').'adminhtml/default/default/boxes.css" type="text/css" rel="stylesheet">';
+		$header .= '<style type="text/css">.grid table td{ font-size: 12px !important; }</style>';
 		$header .= '</head>';
 		$header .= '<body style="font: 12px/1.5em; background: none repeat scroll 0 0 rgba(0, 0, 0, 0);">';
 		$header .= '<div class="grid">';

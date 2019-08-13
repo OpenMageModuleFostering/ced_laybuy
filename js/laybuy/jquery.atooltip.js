@@ -56,7 +56,7 @@
 			/**
 				Position aToolTip
 			*/
-			positionaToolTip = function(){
+			/* positionaToolTip = function(){
 				$('#'+settings.toolTipId).css({
 					top: (obj.offset().top - $('#'+settings.toolTipId).outerHeight() - settings.yOffset) + 'px',
 					left: (obj.offset().left + obj.outerWidth() + settings.xOffset) + 'px'
@@ -66,6 +66,45 @@
 						settings.onShow(obj);
 					}
 				});				
+			} ,*/
+			
+			positionaToolTip = function(){
+				if($(window).width()<680)
+				{
+					var left_cal=obj.offset().left + obj.outerWidth() + settings.xOffset-(680-$(window).width());
+					if(left_cal<0)
+					{
+						left_cal=0;
+					}
+					var new_width = $('#'+settings.toolTipId).width();
+					if(new_width>$(window).width()){
+						new_width = $(window).width();
+					}
+					/* alert($(window).width());
+					alert(new_width); */
+					$('#'+settings.toolTipId).css({
+						top: (obj.offset().top - $('#'+settings.toolTipId).outerHeight() - settings.yOffset) + 'px',
+						left: (left_cal)+'px',
+						width: (new_width)+'px'
+					})
+					.stop().fadeIn(settings.inSpeed, function(){
+						if ($.isFunction(settings.onShow)){
+							settings.onShow(obj);
+						}
+					});		
+				}
+				else
+				{
+					$('#'+settings.toolTipId).css({
+						top: (obj.offset().top - $('#'+settings.toolTipId).outerHeight() - settings.yOffset) + 'px',
+						left: (obj.offset().left + obj.outerWidth() + settings.xOffset) + 'px'
+					})
+					.stop().fadeIn(settings.inSpeed, function(){
+						if ($.isFunction(settings.onShow)){
+							settings.onShow(obj);
+						}
+					});	
+				}
 			},
 			/**
 				Remove aToolTip

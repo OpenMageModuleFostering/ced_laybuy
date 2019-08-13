@@ -34,12 +34,48 @@
  */
 class Ced_LayBuy_ReportController extends Mage_Core_Controller_Front_Action
 {
-	public function preDispatch() {
-        parent::preDispatch();
-        /* if (!Mage::getStoreConfig('payment/laybuy/active')) {
-            $this->norouteAction();
-        } */
+	/**
+     * Retrieve customer session model object
+     *
+     * @return Mage_Customer_Model_Session
+     */
+    protected function _getSession()
+    {
+        return Mage::getSingleton('customer/session');
     }
+	/**
+     * Action predispatch
+     * Check that trainer is eligible for viewing content
+     */
+    public function preDispatch()
+    {
+       parent::preDispatch();
+	   if (!$this->getRequest()->isDispatched()) {
+            return;
+        }
+        
+        $action = $this->getRequest()->getActionName();
+        $openActions = array(
+            'create',
+            'login',
+            'logoutsuccess',
+            'forgotpassword',
+            'forgotpasswordpost',
+            'resetpassword',
+            'resetpasswordpost',
+            'confirm',
+            'confirmation'
+        );
+        $pattern = '/^(' . implode('|', $openActions) . ')/i';
+
+        if (!preg_match($pattern, $action)) {
+            if (!$this->_getSession()->authenticate($this)) {
+                $this->setFlag('', 'no-dispatch', true);
+            }
+        } else {
+            $this->_getSession()->setNoReferer(true);
+        }
+	}
 	
 	public function detailsAction(){
 		$this->loadLayout();

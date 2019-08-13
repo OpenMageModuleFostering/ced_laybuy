@@ -136,6 +136,10 @@ class Ced_LayBuy_Adminhtml_ReportController extends Mage_Adminhtml_Controller_Ac
      */
     public function saveAction()
     {
+		if($this->getRequest()->getParam('is_revised')){
+			$this->_forward('resend');
+			return;
+		}
         $rowId = $this->getRequest()->getParam('id');
         $data = $this->getRequest()->getParams();
 		/* print_r($data);die; */
@@ -191,7 +195,7 @@ class Ced_LayBuy_Adminhtml_ReportController extends Mage_Adminhtml_Controller_Ac
 			}
 		}catch(Exception $e){
 			$this->_getSession()->addError(
-				Mage::helper('laybuy')->__("Failed to modify Plan")
+				Mage::helper('laybuy')->__($e->getMessage())
 			);
 			Mage::logException($e);
 		}
@@ -199,6 +203,31 @@ class Ced_LayBuy_Adminhtml_ReportController extends Mage_Adminhtml_Controller_Ac
 		$this->_redirect('*/*/details',array('_secure' => true,'id'=>$rowId));
 		
     }
+	
+	public function resendAction() {
+		$revise = Mage::getModel('laybuy/revise')->load($this->getRequest()->getParam('is_revised',0));
+		$rowId = $this->getRequest()->getParam('id');
+		if($revise && $revise->getId()) {
+			try {
+				if(Mage::helper('laybuy')->revisePlan($revise)){
+
+					$this->_getSession()->addSuccess(
+						Mage::helper('laybuy')->__("Email re-sent to %s for order#%s",$revise->getEmail(),$revise->getOrderId())
+					);
+				} else {
+					$this->_getSession()->addError(
+						Mage::helper('laybuy')->__("Failed to re-send email")
+					);
+				}
+			} catch (Exception $e) {
+				$this->_getSession()->addError(
+						Mage::helper('laybuy')->__($e->getMessage())
+					);
+				Mage::logException($e);
+			}
+		}
+		$this->_redirect('*/*/details',array('_secure' => true,'id'=>$rowId));
+	}
 	
 	/**
      * Forced to cancel transaction action
@@ -304,8 +333,9 @@ class Ced_LayBuy_Adminhtml_ReportController extends Mage_Adminhtml_Controller_Ac
     }
 	
 	public function docalcAction(){
-		$this->loadLayout();
-		$this->renderLayout();
+		$this->getResponse()->setBody(
+			$this->getLayout()->createBlock('laybuy/adminhtml_docalc')->toHtml()
+		);
 	}
 	
 }

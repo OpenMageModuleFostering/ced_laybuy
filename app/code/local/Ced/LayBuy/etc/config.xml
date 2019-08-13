@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Ced_LayBuy>
-			<version>0.9.0</version>
+			<version>1.0.0</version>
 			<author>ASHEESH SINGH (asheeshsingh@cedcoss.com)</author>
 		</Ced_LayBuy>
 	</modules>
@@ -63,6 +63,16 @@
 		</translate>
 	</frontend>
 	<global>
+		<fieldsets>
+    		<sales_convert_quote_payment>
+    		 	<laybuy_init>
+    		 		<to_order_payment>*</to_order_payment>
+    		 	</laybuy_init>
+    		 	<laybuy_months>
+    		 		<to_order_payment>*</to_order_payment>
+    		 	</laybuy_months>
+    		</sales_convert_quote_payment>
+    	</fieldsets>
 		<models>
 			<laybuy>
 				<class>Ced_LayBuy_Model</class>
@@ -133,6 +143,7 @@
 				<mind>20%</mind>
 				<maxd>50%</maxd>
 				<months>3</months>
+				<adminfee>0</adminfee>
 				<ftp_ip>https://lay-buys.com/report/</ftp_ip>
 				<allowspecific>0</allowspecific>
 				<sort_order>1</sort_order>
@@ -141,6 +152,11 @@
 			</laybuy>
 		</payment>
 		<laybuy>
+			<conditional_criteria>
+				<total>0</total>
+				<allowspecificcategory>0</allowspecificcategory>
+				<allowspecificgroup>0</allowspecificgroup>
+			</conditional_criteria>
             <fetch_reports>
                 <schedule>1</schedule>
                 <time>00,00,00</time>
@@ -149,17 +165,23 @@
 	</default>
 	<crontab>
         <jobs>
-			<LayBuy_Cron_Check>
+	    <LayBuy_Cron_Check>
                 <schedule>
                     <cron_expr>* * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>laybuy/Observer::checkCron</model>
+					
                 </run>
             </LayBuy_Cron_Check>
             <LayBuy_Automated_Fetch_Updates>
+             <schedule>
+             
+				<config_path>crontab/jobs/LayBuy_Automated_Fetch_Updates/schedule/cron_expr</config_path>
+                </schedule>
                 <run>
                     <model>laybuy/Observer::fetchUpdates</model>
+					
                 </run>
             </LayBuy_Automated_Fetch_Updates>
         </jobs>

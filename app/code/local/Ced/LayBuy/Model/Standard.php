@@ -1,4 +1,5 @@
-<?php
+<?php 
+
 /**
  * Lay-Buys
  *
@@ -71,13 +72,15 @@ class Ced_LayBuy_Model_Standard extends Mage_Payment_Model_Method_Abstract
 			
 			/* Condition for customer groups for method availability */
 			if($status){
-				$configCustomerGroupId = explode(',',Mage::getStoreConfig('laybuy/conditional_criteria/customergroup',$storeId ));
-				$customerGroupId = $quote ? $quote->getData('customer_group_id'):-5;
-				if($customerGroupId != -5){
-					if($configCustomerGroupId && in_array($customerGroupId,$configCustomerGroupId)){
-						$status = true;
-					}else{
-						$status = false;
+				if(Mage::getStoreConfig('laybuy/conditional_criteria/allowspecificgroup',$storeId)) {
+					$configCustomerGroupId = explode(',',Mage::getStoreConfig('laybuy/conditional_criteria/customergroup',$storeId ));
+					$customerGroupId = $quote ? $quote->getData('customer_group_id'):-5;
+					if($customerGroupId != -5){
+						if($configCustomerGroupId && in_array($customerGroupId,$configCustomerGroupId)){
+							$status = true;
+						}else{
+							$status = false;
+						}
 					}
 				}
 			}	
@@ -127,19 +130,21 @@ class Ced_LayBuy_Model_Standard extends Mage_Payment_Model_Method_Abstract
 		$productName = '';
 		$configCategories = explode(',',Mage::getStoreConfig('laybuy/conditional_criteria/categories',$storeId ));
 		$xproducts = explode(',',Mage::getStoreConfig('laybuy/conditional_criteria/xproducts',$storeId));
-		if($configCategories){
-			foreach($cartItems as $_product){
-				$_product = Mage::getModel('catalog/product')->load($_product->getProductId());
-				if($xproducts && in_array($_product->getId(),$xproducts)){
-					$status = false;
-					$productName .= $_product->getName().',';
-				}elseif(count(array_diff($_product->getCategoryIds(),$configCategories))>0){
-					$status = false;
-					$productName .= $_product->getName().',';
-				}
+		
+		foreach($cartItems as $_product){
+			$_product = Mage::getModel('catalog/product')->load($_product->getProductId());
+			if($xproducts && in_array($_product->getId(),$xproducts)){
+				$status = false;
+				$productName .= $_product->getName().',';
+			} elseif(!Mage::getStoreConfig('laybuy/conditional_criteria/allowspecificcategory',$storeId)) {
+				$status = true;
+			} elseif ($configCategories && count(array_diff($_product->getCategoryIds(),$configCategories))>0){
+				$status = false;
+				$productName .= $_product->getName().',';
 			}
-			$productName = rtrim($productName,',');
 		}
+		$productName = rtrim($productName,',');
+		
         return array($status,$productName);
     }
 }

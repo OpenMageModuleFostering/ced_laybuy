@@ -56,14 +56,24 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit extends Mage_Adminhtml_Block_Widget
 			
 			'class'	   => 'back',
 		));
+		$buttonLabel = Mage::helper('laybuy')->__('Save and Send Email to Buyer');
+		if($model->getStatus() == -2) {
+			$revised = Mage::getModel('laybuy/revise')->getCollection()
+							->addFieldToFilter('transaction_id',array('eq'=>$model->getId()))
+							->addFieldToFilter('type',array('eq'=>'new'))->getLastItem()->load();
+			if($revised && $revised->getId()){
+				$model = $revised;
+				$buttonLabel = Mage::helper('laybuy')->__('Resend Email to Buyer');
+			}
+		}
 		$this->_addButton('save', array(
-		
-			'label'    => Mage::helper('laybuy')->__('Save and Send Email to Buyer'),
 			
-			'onclick'  => "editForm.submit()",
-			
-			'class'	   => 'save',
-		));
+				'label'    => $buttonLabel,
+				
+				'onclick'  => "editForm.submit()",
+				
+				'class'	   => 'save',
+			));
     }
 
     /**

@@ -20,7 +20,6 @@
  *
  * @category    Ced
  * @package     Ced_LayBuy
- * @author 		Asheesh Singh<asheeshsingh@cedcoss.com>
  * @copyright   Copyright LAY-BUYS (2011). (http://lay-buys.com/)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,7 +28,6 @@
  *
  * @category    Ced
  * @package     Ced_LayBuy
- * @author 		Asheesh Singh<asheeshsingh@cedcoss.com>
  */
 class Ced_LayBuy_StandardController extends Mage_Core_Controller_Front_Action
 {
@@ -189,7 +187,8 @@ class Ced_LayBuy_StandardController extends Mage_Core_Controller_Front_Action
         $this->_redirect('checkout/onepage/success',array('_secure' => true));
     }
 	public function docalcAction(){
-		$this->loadLayout();
-		$this->renderLayout();
+		$this->getResponse()->setBody(
+			$this->getLayout()->createBlock('laybuy/standard_docalc')->toHtml()
+		);
 	}
 }

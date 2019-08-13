@@ -1,4 +1,5 @@
-<?php
+<?php 
+
 /**
  * Lay-Buys
  *
@@ -40,7 +41,7 @@ class Ced_LayBuy_ReviseController extends Mage_Core_Controller_Front_Action
     public function cancelAction()
     {
 		$session = Mage::getSingleton('checkout/session');
-		Mage::log('Revise Order of LayBuy {{'."Order_id=".$order->getId()."|".$this->getRequest()->getParam('ErrorMessage')."}}", null, 'laybuy_failure.log');
+		Mage::log('Revise Order of LayBuy {{'.$this->getRequest()->getParam('ErrorMessage')."}}", null, 'laybuy_failure.log');
 		$session->addError($this->getRequest()->getParam('ErrorMessage'));
         $this->_redirect('checkout/onepage/failure',array('_secure' => true));
     }
@@ -59,7 +60,7 @@ class Ced_LayBuy_ReviseController extends Mage_Core_Controller_Front_Action
 		}
 		$session = Mage::getSingleton('checkout/session');
 		try{
-			$currentDate = date('Y-m-d h:i:s',time());
+			$currentDate = Mage::getModel('core/date')->date('Y-m-d h:i:s');
 			$status['_secure'] = true;
 			$str = print_r($status, true);
 			$revise = Mage::getModel('laybuy/revise')->load($status['merchants_ref_no']);
@@ -71,7 +72,7 @@ class Ced_LayBuy_ReviseController extends Mage_Core_Controller_Front_Action
 				$status['payment_amounts'] = 0;
 				$status['first_payment_due'] = $currentDate;
 				$status['last_payment_due'] = $currentDate;
-				$status['paypal_profile_id'] = '';
+				$status['paypal_profile_id'] = 'n/a';
 				if(Mage::helper('laybuy')->processOrder($status['custom'],1))
 					$state = 1;	
 			}
@@ -84,21 +85,14 @@ class Ced_LayBuy_ReviseController extends Mage_Core_Controller_Front_Action
 			$order = Mage::getModel('sales/order');
 			$order->loadByIncrementId($status['custom']);
 			
-			if($order && $order->getId()){						
+			if($order && $order->getId()){
+				if($order->getCreatedAt() > $currentDate) $currentDate = $order->getCreatedAt();
 				$createdAt = Mage::helper('core')->formatDate($currentDate, Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true);
 				$payment_info = $order->getPayment()->getData('additional_information');
 				
 				
-				$payment_info['transactions'][$status['paypal_profile_id']][] = array(
-													'txnID' => $status['dp_paypal_txn_id'],
-													'type'	=> 'd',
-													'paymentStatus' => 'Completed',
-													'paymentDate' => $createdAt,
-													'amount' => $status['downpayment_amount']
-												);
-
-				$order->getPayment()->setData('additional_information',$payment_info);
-				
+				$order->getPayment()->setData('laybuy_init',$status['downpayment'])
+									->setData('laybuy_months',$status['months']);
 				$order->save();
 				
 				

@@ -57,15 +57,16 @@ class Ced_LayBuy_Block_Adminhtml_Report_Details extends Mage_Adminhtml_Block_Wid
 
 				'class'	  => 'delete',
 			));
-			
+		}
+		if(in_array($model->getStatus(),array(-2,0))) {
 			$this->_addButton('edit', array(
 			
-                'label'    => Mage::helper('laybuy')->__('Revise Instalment Plan'),
+				'label'    => Mage::helper('laybuy')->__('Revise Instalment Plan'),
 				
 				'onclick'  => "setLocation('{$this->getUrl('*/*/edit',array('_secure' => true,'id'=>$this->getRequest()->getParam('id')))}')",
 				
 				'class'	   => 'add',
-            ));
+			));
 		}
     }
 

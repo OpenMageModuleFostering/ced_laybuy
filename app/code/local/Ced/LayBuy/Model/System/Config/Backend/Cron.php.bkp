@@ -40,26 +40,15 @@ class Ced_LayBuy_Model_System_Config_Backend_Cron extends Mage_Core_Model_Config
         $time = explode(',', Mage::getModel('core/config_data')->load('laybuy/fetch_reports/time', 'path')->getValue());
         if (Mage::getModel('core/config_data')->load('laybuy/fetch_reports/active', 'path')->getValue()) {
             $interval = Mage::getModel('core/config_data')->load(self::CRON_MODEL_PATH_INTERVAL, 'path')->getValue();
-            $cronExprString = $this->getSchedule($time,$interval);
+            $cronExprString = "{$time[1]} {$time[0]} */{$interval} * *";
         }
-       
+
         Mage::getModel('core/config_data')
-            ->load(self::CRON_STRING_PATH, 'path')
+            ->load('path_name', 'path')
             ->setValue($cronExprString)
-            ->setPath(self::CRON_STRING_PATH)
+            ->setPath('path_name')
             ->save();
 
         return parent::_afterSave();
     }
-
-	protected function getSchedule($time=array(),$interval)
-     {
-     	switch ($interval) {     		
-     		case 2: return "{$time[1]} {$time[0]} */2 * *"; break;
-     		case 7: return "{$time[1]} {$time[0]} * * 0"; break;
-     		case 30: return "{$time[1]} {$time[0]} 1 * *"; break;
-     		case 1: 
-     		default : return "{$time[1]} {$time[0]} * * *"; break;
-     	}
-     }
 }

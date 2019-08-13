@@ -42,6 +42,19 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit_Form extends Mage_Adminhtml_Block_W
     {
         $calcUrl = $this->getUrl('*/*/docalc',array('_secure' => true)); /*'http://lay-buys.com/gateway/docalc.php'*/;
 		$model = Mage::registry('current_laybuy_transaction_edit');
+		$newAmount = $model->getData('amount') - ($model->getData('downpayment_amount') + (((int)$model->getTransaction() - 2) * $model->getData('payment_amounts')));
+		$isRevised = 0;
+		if($model->getStatus() == -2) {
+			$revised = Mage::getModel('laybuy/revise')->getCollection()
+							->addFieldToFilter('transaction_id',array('eq'=>$model->getId()))
+							->addFieldToFilter('type',array('eq'=>'new'))->getLastItem()->load();
+			if($revised && $revised->getId()) {
+				$model = $revised;
+				$newAmount = $model->getData('amount');
+				$isRevised = $model->getId();
+			}	
+		}
+		
 		/* print_r($model->getData());die; */
         /* @var $model Mage_Paypal_Model_Report_Settlement_Row */
         $settlement = Mage::getSingleton('laybuy/report');
@@ -49,7 +62,8 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit_Form extends Mage_Adminhtml_Block_W
 		$order_id = $model->getData('order_id');
 		$order = Mage::getModel('sales/order')->loadByIncrementId($order_id);
 		$storeId = $order->getStoreId();
-		$newAmount = $model->getData('amount') - ($model->getData('downpayment_amount') + (((int)$model->getTransaction() - 2) * $model->getData('payment_amounts')));
+		//($isRevised && !$model->getPaymentType())?'checked':'' => ($isRevised && !$model->getPaymentType())?'checked':''
+        
         $fieldsets = array(
             'reference_fieldset' => array(
                 'fields' => array( 
@@ -58,6 +72,11 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit_Form extends Mage_Adminhtml_Block_W
 									'type'	=> 'hidden',
 									'value' => Mage::getStoreConfig('payment/laybuy/membership_number',$storeId),
 									),
+					'is_revised' => array(
+									'label' => 'Is Revised',
+									'type'  => 'hidden',
+									'value' => $isRevised
+ 					),
 					'paypal_profile_id' => array(
 											'label' => $settlement->getFieldLabel('paypal_profile_id'),
 											'type'	=> 'text',
@@ -85,7 +104,7 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit_Form extends Mage_Adminhtml_Block_W
                 'fields' => array(
                     'amount' => array(
                         'label' => $settlement->getFieldLabel('total_amount'),
-                        'value' => number_format($newAmount,2,'.',','),
+                        'value' => $newAmount,
 						'type'	=> 'hidden',
                     ),
 					'pending_amount' => array(
@@ -100,13 +119,15 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit_Form extends Mage_Adminhtml_Block_W
                         'value' => 1,
 						'type'	=> 'radio',
 						'onclick'=> 'methodChange(1)',
-						'checked' => 'checked',
+					
+						!$isRevised || ($isRevised && $model->getPaymentType())?'checked':'' => !$isRevised || ($isRevised && $model->getPaymentType())?'checked':'',
 						'after_element_html' => '<label for="lay-buy" class="inline">Lay-Buy</label>',
                     ),
 					'buy-now' => array(
                         'label' => $settlement->getFieldLabel(''),
                         'value' => 0,
 						'type'	=> 'radio',
+						($isRevised && !$model->getPaymentType())?'checked':'' => ($isRevised && !$model->getPaymentType())?'checked':'',
 						'onclick'=> 'methodChange(0)',
 						'after_element_html' => '<label for="buy-now" class="inline">Buy-Now</label>',
                     ),
@@ -223,7 +244,7 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit_Form extends Mage_Adminhtml_Block_W
                 'legend' => Mage::helper('laybuy')->__("Please Choose Buyer's New Payment Plan"),
 			),
         );
-
+		//print_r($fieldsets);die;
         $form = new Varien_Data_Form();
 		$submitUrl = $this->getUrl('*/*/save',array('_secure' => true,'id'=>$this->getRequest()->getParam('id')));
 		$form->setAction($submitUrl)
@@ -257,6 +278,7 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit_Form extends Mage_Adminhtml_Block_W
 						'value' => isset($info['value']) ? $info['value'] : $model->getData($id),
 						'after_element_html' => isset($info['after_element_html']) ? $info['after_element_html'] : '',
 						isset($info['readonly'])?'readonly':'' => isset($info['readonly'])?$info['readonly']:false,
+						($isRevised && !isset($info['readonly']) && $info['type'] != 'hidden')? 'disabled':'' => ($isRevised && !$info['readonly'] && $info['type'] != 'hidden')?true:false, 
 						isset($info['values'])?'values':'' => isset($info['values'])?$info['values']:'',
 						isset($info['onchange'])?'onchange':'' => isset($info['onchange'])?$info['onchange']:'',
 						isset($info['onclick'])?'onclick':'' => isset($info['onclick'])?$info['onclick']:'',
@@ -265,16 +287,22 @@ class Ced_LayBuy_Block_Adminhtml_Report_Edit_Form extends Mage_Adminhtml_Block_W
 					
 				}
 				if(isset($info['dy']) && isset($info['onchange']) && $function = $info['onchange']){
+					
+					if ($isRevised && !$model->getPaymentType()) {
+						$funtionData = 'methodChange(0);document.getElementById("buy-now").checked = true;';
+					} else {
+						$funtionData = 'document.getElementById("lay-buy").checked = true;
+									document.getElementById("loading-mask").show();
+									var f = document.getElementById("preview-tbl");
+								    f.src = "'.$calcUrl.'?currency="+document.laybuy_revise_plan.currency.value+"&amt="+document.laybuy_revise_plan.amount.value+"&init="+document.laybuy_revise_plan.dp_amount.value+"&mnth="+document.laybuy_revise_plan.months.value+"&rnd="+Math.random()+"&html=1";
+									
+									data = "'.$calcUrl.'?currency="+document.laybuy_revise_plan.currency.value+"&amt="+document.laybuy_revise_plan.amount.value+"&init="+document.laybuy_revise_plan.dp_amount.value+"&mnth="+document.laybuy_revise_plan.months.value+"&rnd="+Math.random();
+									loadXMLDoc(data);';
+					}
 					$id->setAfterElementHtml(
 					   '<script type="text/javascript">
 							  function '.$function.'{
-								document.getElementById("lay-buy").checked = true;
-								document.getElementById("loading-mask").show();
-								var f = document.getElementById("preview-tbl");
-							    f.src = "'.$calcUrl.'?currency="+document.laybuy_revise_plan.currency.value+"&amt="+document.laybuy_revise_plan.amount.value+"&init="+document.laybuy_revise_plan.dp_amount.value+"&mnth="+document.laybuy_revise_plan.months.value+"&rnd="+Math.random()+"&html=1";
-								
-								data = "'.$calcUrl.'?currency="+document.laybuy_revise_plan.currency.value+"&amt="+document.laybuy_revise_plan.amount.value+"&init="+document.laybuy_revise_plan.dp_amount.value+"&mnth="+document.laybuy_revise_plan.months.value+"&rnd="+Math.random();
-								loadXMLDoc(data);
+								'.$funtionData.'
 							  } 
 							  setTimeout("'.$function.';",200);
 							  function loadXMLDoc(url)

@@ -42,10 +42,12 @@
 <?php else:?>
 	<p>
 		<?php 
-			$laybuy = $this->getInfo()->getAdditionalInformation();
-			echo "<b>Down Payment % : </b>".$laybuy['INIT'];
-			echo "<br/>";
-			echo "<b>Months : </b>".$laybuy['MONTHS'];
+			$laybuy = Mage::helper('laybuy')->getInstalmentData($this->getInfo());
+			if(isset($laybuy['INIT']) && isset($laybuy['MONTHS']) && $laybuy['INIT'] && $laybuy['MONTHS']) {
+				echo "<b>Down Payment % : </b>".$laybuy['INIT'];
+				echo "<br/>";
+				echo "<b>Months : </b>".$laybuy['MONTHS'];
+			}
 		?>
 	</p>
 <?php endif; ?>

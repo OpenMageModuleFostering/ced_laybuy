@@ -1,4 +1,5 @@
-<?php
+<?php 
+
 /**
  * Lay-Buys
  *
@@ -115,10 +116,17 @@ class Ced_LayBuy_Model_Observer
 	/**
      * Chcek cron setup is available at server or not.
      */
-	public function checkCron(){
-		if(!Mage::getStoreConfig('paymnet/laybuy/cronenabled')){
-			$config = Mage::getConfig();
-			$config->setNode("paymnet/laybuy/cronenabled", 1);
+	public function checkCron() {
+		Mage::log('Check Cron 1',null,'laybuy_cron.log');
+		if(!Mage::getStoreConfig('payment/laybuy/cronenabled')) {
+			Mage::log('Check Cron 2',null,'laybuy_cron.log');
+			try {
+				$config = new Mage_Core_Model_Config();
+				$config->saveConfig("payment/laybuy/cronenabled", 1);
+				Mage::log('Check Cron 3: '.Mage::getStoreConfig('payment/laybuy/cronenabled'),null,'laybuy_cron.log');
+			} catch (Exception $e) {
+				Mage::log('Check Cron exp: '.$e->getMessage(),null,'laybuy_cron.log');
+			}
 		}
 	}
 }

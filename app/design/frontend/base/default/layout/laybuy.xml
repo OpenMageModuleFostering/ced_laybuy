@@ -7,20 +7,22 @@
 		</reference>
 	</default>
 	<checkout_onepage_review>
-		<reference name="checkout.onepage.review.button">
-			<action method="setTemplate" ifconfig="payment/laybuy/active">
+		<reference name="checkout.onepage.review.info.items.after">
+			<block type="core/template" name="laybuy.checkout.onepage.review.button" as="laybuy_button" template="laybuy/checkout/onepage/review/button.phtml"/>
+			<!--<action method="setTemplate" ifconfig="payment/laybuy/active">
 				<template>laybuy/checkout/onepage/review/button.phtml</template>
 			</action>
+			<action method="insert" ifconfig="payment/laybuy/active"><template>laybuy/checkout/onepage/review/button.phtml</template></action> -->
 		</reference>
 	</checkout_onepage_review>
-	<laybuy_standard_docalc>
+	<!-- <laybuy_standard_docalc>
 		<block type="core/text_list" name="root" output="toHtml">
 			<block type="laybuy/standard_docalc" name="laybuy.standard.docalc"/>
 		</block>
-	</laybuy_standard_docalc>
+	</laybuy_standard_docalc> -->
 	<laybuy_report_details>
 		<update handle="customer_account"/>
-			<reference name="head">
+		<reference name="head">
             <action method="setTitle" translate="title" module="customer"><title>View Transaction Details</title></action>
         </reference>
 		<reference name="customer_account_navigation">

@@ -1,4 +1,5 @@
-<?php
+<?php 
+
 /**
  * Lay-Buys
  *
@@ -39,7 +40,51 @@ class Ced_LayBuy_Helper_Data extends Mage_Core_Helper_Abstract{
 			   '-2' => $this->__('Revise Requested'),
 			  '2' => $this->__('Revised'),
           );
-	}			
+	}
+	
+	public function getInstalmentData($payment,$key = '') {
+		if(!$payment) return false;
+		if(empty($key)) {
+			$customerOptions['INIT'] = $payment->getData('laybuy_init');
+			$customerOptions['MONTHS'] = $payment->getData('laybuy_months');
+			return $customerOptions;
+		} else {
+			return $payment->getData('laybuy_'.strtolower($key));
+		}
+	}
+
+	public function postToLaybuy($url = 'https://lay-buys.com/gateway/',$data = array()){	
+		if(!is_array($data) || count($data) == 0) return false;
+	
+		$postdata ='';
+
+		foreach($data as $lname=>$lvalue){
+			/* if($lname == 'MEMBER') continue; */
+			$postdata .= $lname."=".urlencode($lvalue)."&";
+		}	
+		$postdata = rtrim($postdata,'&');
+		/* echo $postdata;
+		echo "<hr>";
+		echo $url; */
+		 
+		$ch = curl_init();					
+		curl_setopt($ch, CURLOPT_URL,$url);	
+		curl_setopt($ch, CURLOPT_POST, 1);					
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);					
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 					
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,false);
+		$result = curl_exec($ch);	
+		/* print_r($result);die('hello'); */		
+		curl_close ($ch);
+		
+		$result = json_decode($result,true);
+	
+		if(isset($result['ACK']) && isset($result['TOKEN']) && $result['ACK'] == 'SUCCESS'){
+			return $result['TOKEN'];
+		}
+		return false;				
+	}
+	
 	public function fetchFromLaybuy($config){			
 		$url = $config['hostname'];					
 		$matchedData = $this->getMatchingData();
@@ -49,17 +94,15 @@ class Ced_LayBuy_Helper_Data extends Mage_Core_Helper_Abstract{
 		$data .= "mid=".$config['username']."&";					
 		/* $data .= "custom=".$orderIds."&"; */
 		$data .= "profileIds=".$profileIds;
-		/* $data .= "&test=1"; */
-		/*  echo $data;die; */
 		$ch = curl_init();					
-		curl_setopt($ch, CURLOPT_URL,$url);					
+		curl_setopt($ch, CURLOPT_URL,$url);	
 		curl_setopt($ch, CURLOPT_POST, 1);					
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);					
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); /* use this to suppress output */					
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,false); /* tell cURL to graciously accept an SSL certificate */					
 		$result = curl_exec ($ch);					
 		curl_close ($ch);		
-		/* print_r(json_decode($result)); die; */
+		/* print_r($result); die('here'); */
 		return json_decode($result);				
 	}
 	
@@ -83,12 +126,14 @@ class Ced_LayBuy_Helper_Data extends Mage_Core_Helper_Abstract{
 							/* ->addFieldToFilter('last_payment_due',array('lt'=>date('Y-m-d h:i:s',time()))) */
 							   ->addFieldToFilter('status',array('eq'=>0));
 		foreach($collection as $report){
-			$orderIds .= $report->getData('laybuy_ref_no').",";
-			$profileIds .= $report->getData('paypal_profile_id').",";
+			if($report->getData('laybuy_ref_no'))
+				$orderIds .= $report->getData('laybuy_ref_no').",";
+			if($report->getData('paypal_profile_id'))
+				$profileIds .= $report->getData('paypal_profile_id').",";
 			/* $result .= $report->getData('order_id').","; */
 		}
-		$result['orderIds'] = rtrim($orderIds,',');
-		$result['profileIds'] = rtrim($profileIds,',');
+		$result['orderIds'] = trim($orderIds,',');
+		$result['profileIds'] = trim($profileIds,',');
 		return $result;
 	}
 	
@@ -117,17 +162,18 @@ class Ced_LayBuy_Helper_Data extends Mage_Core_Helper_Abstract{
 		if(!$paypalProfileId)
 			return true;
 		Mage::log('cancel paypal profile called',null,'laybuy_success.log');
-		$url = 'https://lay-buys.com/vtmob/deal5cancel.php';		
+		$url = 'https://lay-buys.com/vtmob/deal5cancel.php';
 		$data ='';			
 		$data .= "&mid=".Mage::getStoreConfig('payment/laybuy/membership_number',$storeId);
 		$data .= "&paypal_profile_id=".$paypalProfileId;
 		$ch = curl_init();		
-		curl_setopt($ch, CURLOPT_URL,$url);		
+		curl_setopt($ch, CURLOPT_URL,$url);	
 		curl_setopt($ch, CURLOPT_POST, 1);		
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);		
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); /* use this to suppress output */		
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,false); /* tell cURL to graciously accept an SSL certificate */		
 		$result = curl_exec ($ch);
+		/* print_r($result);die; */
 		if($result == 'success'){
 			$result = print_r($result,true);
 			Mage::log('Cancel Request Array to LayBuy {{'.$data."}}", null, 'laybuy_success.log');
@@ -190,16 +236,16 @@ class Ced_LayBuy_Helper_Data extends Mage_Core_Helper_Abstract{
 		/* $order = Mage::getModel('sales/order')->loadByIncrementId($revise->getOrderId()); */
 		$storeId = $revise->getStoreId();
 		
-		$url = 'https://lay-buys.com/vtmob/deal5.php';		
+		$url = 'https://lay-buys.com/vtmob/deal5.php';
 		$data ='';		
 		$data .= "eml=".$revise->getEmail();		
 		$data .= "&prc=".$revise->getAmount();
 		$data .= "&curr=".$revise->getCurrency();
-		if($revise->getPaymentType()==1){
+		if($revise->getPaymentType()==1) {
 			/* Lay-Buy Payment */
 			$data .= "&pp=1";
 			$data .= "&pplan=1";
-		}else{
+		} else {
 			/* Buy-Now Payment */
 			$data .= "&pp=0";
 			$data .= "&pplan=0";
@@ -211,19 +257,30 @@ class Ced_LayBuy_Helper_Data extends Mage_Core_Helper_Abstract{
 		$data .= "&id=".$revise->getId()."-".$revise->getOrderId();
 		$data .="&CANCELURL=".Mage::getUrl('laybuy/revise/cancel/',array('_secure'=>true));
 		$data .="&RETURNURL=".Mage::getUrl('laybuy/revise/success/',array('_secure'=>true));
+		$IMAGE  = Mage::getStoreConfig('payment/laybuy/image',$storeId);
+		if($IMAGE){
+			$IMAGE = Mage::getBaseUrl('media')."laybuy/".$IMAGE;
+		}else{
+			$IMAGE = 'http://lay-buys.com/lb2.jpg';
+		}
+		$data .="&IMAGE=".$IMAGE;
+		/* $arr = explode('&',$data);
+		print_r($arr);die; */
 		$ch = curl_init();		
-		curl_setopt($ch, CURLOPT_URL,$url);		
+		curl_setopt($ch, CURLOPT_URL,$url);
 		curl_setopt($ch, CURLOPT_POST, 1);		
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);		
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); /* use this to suppress output */		
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,false); /* tell cURL to graciously accept an SSL certificate */		
 		$result = curl_exec ($ch);
-		if($result == 'success'){
+		
+		if($result == 'success') {
+			$result1 = $result;
 			$result = print_r($result,true);
 			Mage::log('Revise Request Array to LayBuy {{'.$data."}}", null, 'laybuy_success.log');
 			curl_close ($ch);
-			return true;
-		}else{
+			return $result1;
+		} else {
 			Mage::log('Revise Response Array From LayBuy {{'.$result."}}", null, 'laybuy_failure.log');
 			curl_close ($ch);
 			return false;

@@ -20,25 +20,18 @@
  *
  * @category    Ced
  * @package     Ced_LayBuy
- * @author 	Asheesh Singh<asheeshsingh@cedcoss.com>
+ * @author 		Asheesh Singh<asheeshsingh@cedcoss.com>
  * @copyright   Copyright LAY-BUYS (2011). (http://lay-buys.com/)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
-/**
- * Source model for available instalment report fetching intervals
- */
-class Ced_LayBuy_Model_System_Config_Source_FetchingSchedule
+class Ced_LayBuy_Model_System_Config_Source_Allowspecificgroup
 {
     public function toOptionArray()
     {
         return array (
-            1 => Mage::helper('laybuy')->__("Daily"),
-            2 => Mage::helper('laybuy')->__("Every 2 days"),
-            7 => Mage::helper('laybuy')->__("Every 7 days"),
-           30 => Mage::helper('laybuy')->__("Every 30 days"),
-           
+			0 => Mage::helper('laybuy')->__("All Allowed Customer Groups"),
+            1 => Mage::helper('laybuy')->__("Specific Customer Groups"),
         );
     }
 }

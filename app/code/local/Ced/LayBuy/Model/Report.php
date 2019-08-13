@@ -1,4 +1,5 @@
-<?php
+<?php 
+
 /**
  * Lay-Buys
  *
@@ -66,7 +67,7 @@ class Ced_LayBuy_Model_Report extends Mage_Core_Model_Abstract
 		$helper = Mage::helper('laybuy');	
 		
 		$listing = $helper->fetchFromLaybuy($config);
-		/* print_r($listing);die; */
+		
 		foreach($listing as $orderId=>$reports){
 			$status = $reports->status;
 			$report = $reports->report;
@@ -122,15 +123,14 @@ class Ced_LayBuy_Model_Report extends Mage_Core_Model_Abstract
 						
 					$newStr .= 	'<td style="text-align: center;"> '.$transaction->paymentStatus.' </td></tr>';
 					
-					$nextPaymentStatus = $transaction->paymentStatus;
 					
 				}
 				
 			}
-			if($pending_flag)
+			//if($pending_flag)
 				$startIndex = $month+1;
-			else
-				$startIndex = $month+2;
+			// else
+				// $startIndex = $month+2;
 			if($month<$months){
 				for($month=$startIndex;$month<=$months;$month++){
 					$newStr .= '<tr ';
@@ -149,7 +149,7 @@ class Ced_LayBuy_Model_Report extends Mage_Core_Model_Abstract
 				}
 			}
 			$newStr .= '</tbody></table></div></div>';
-
+			
 			switch($status){
 				case -1: if($helper->processOrder($orderId,0)){
 							$model->setStatus(-1)->setReport($newStr)->setTransaction($startIndex)->save();	/* Cancel */

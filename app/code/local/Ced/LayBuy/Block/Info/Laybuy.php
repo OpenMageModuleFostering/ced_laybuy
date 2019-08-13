@@ -44,6 +44,18 @@ class Ced_LayBuy_Block_Info_Laybuy extends Mage_Payment_Block_Info
         parent::_construct();
         $this->setTemplate('laybuy/info/default.phtml');
     }
+	
+	/**
+     * Prepare information specific to current payment method
+     *
+     * @param Varien_Object|array $transport
+     * @return Varien_Object
+     */
+	public function toPdf()
+    {
+       $this->setTemplate('laybuy/info/pdf/laybuy.phtml');
+       return $this->toHtml();
+    }
 
     /**
      * Prepare information specific to current payment method

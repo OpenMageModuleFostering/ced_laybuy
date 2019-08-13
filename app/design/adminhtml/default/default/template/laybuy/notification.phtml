@@ -26,9 +26,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
  ?>
+<?php if(!Mage::getStoreConfig('payment/laybuy/cronenabled') && Mage::getStoreConfig('laybuy/fetch_reports/active')) { ?>
 <div class="notification-global">	
-	<?php if(!Mage::getStoreConfig('paymnet/laybuy/cronenabled')){ ?>
-		<strong class="label">Cron must be enabled for "Automated Fetch Updates".</strong>
-	<?php } ?>
+	<strong class="label">Cron must be enabled for "Automated Fetch Updates".</strong>
 	Click here to go to	<a href="<?php echo Mage::helper("adminhtml")->getUrl("laybuy/adminhtml_report/",array('_secure'=>true)); ?>">Lay-Buys Instalment Reports</a>.
 </div>
+<?php } ?>

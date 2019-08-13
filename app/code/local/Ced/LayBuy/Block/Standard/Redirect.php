@@ -26,42 +26,32 @@
  */
 class Ced_LayBuy_Block_Standard_Redirect extends Mage_Core_Block_Abstract
 {
-    protected function _toHtml()
-    {
-        $dcount = 0;
-		$helper = Mage::helper('laybuy/config');
-		$submitUrl = $helper->getSubmitUrl();
 
-        $form = new Varien_Data_Form();
-        $form->setAction($submitUrl)
-            ->setId('laybuy_standard_checkout')
-            ->setName('laybuy_standard_checkout')
-            ->setMethod('POST')
-            ->setUseContainer(true);
-		
+	protected function _toHtml()
+    {
+        $helper = Mage::helper('laybuy');
+		$chelper = Mage::helper('laybuy/config');
+		$redirectURL = $chelper->getSubmitUrl();
 		$session = Mage::getSingleton('checkout/session');
-		$data =  $helper->extractAndPrepareRequiredValueForFormFields($session);
+		$data =  $chelper->extractAndPrepareRequiredValueForFormFields($session);
 		
-        foreach ($helper->getStandardCheckoutFormFields($data) as $field=>$value) {
-            if(is_array($value)){
-				foreach($value as $description){
-					$form->addField($field.$dcount, 'hidden', array('name'=>$field, 'value'=>$description));
-					$dcount++;
-				}
-			}else{
-				$form->addField($field, 'hidden', array('name'=>$field, 'value'=>$value));
-			}
-        }
-        $submitButton = new Varien_Data_Form_Element_Submit(array(
-            'value'    => $this->__('Click here if you are not redirected within 10 seconds...'),
-        ));
-        $submitButton->setId('laybuy_standard_payment');
-        $form->addElement($submitButton);
-        $html = '<html><body>';
-        $html.= $this->__('You will be redirected to the PayPal website in a few seconds.');
-        $html.= $form->toHtml();
-        $html.= '<script type="text/javascript">document.getElementById("laybuy_standard_checkout").submit();</script>';
-        $html.= '</body></html>';
+		if ($token = $helper->postToLaybuy($redirectURL,$chelper->getStandardCheckoutFormFields($data))) {
+			$session->setLayBuyToken($token);
+			$redirectURL .= '?TOKEN='.$token;
+			$html = '<html><body>';
+			$html.= $this->__('You will be redirected to the PayPal website in a few seconds.');
+			$html.= '<br><input type="button" onClick="window.location=\''.$redirectURL.'\' " value="'.$this->__('Click here if you are not redirected within 10 seconds...').'" />';
+			$html.= '<script type="text/javascript">setTimeout(\'window.location="'.$redirectURL.'"\',1000);</script>';
+			$html.= '</body></html>';
+		}else{
+			$html = '<html><body>';
+			$html.= $this->__('You will be redirected to the PayPal website in a few seconds.');
+			$html.= '<br><input type="button" onClick="window.location=window.location;" value="'.$this->__('Click here if you are not redirected within 10 seconds...').'" />';
+			$html.= '<script type="text/javascript">setTimeout("window.location=window.location;",1000);</script>';
+			$html.= '</body></html>';
+		}
+
+		
 
         return $html;
     }

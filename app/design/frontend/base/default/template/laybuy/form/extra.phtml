@@ -33,7 +33,9 @@
 <?php $_code=$this->getMethodCode() ?>
 <?php
 	$sessionPayment = Mage::getSingleton('checkout/session')->getQuote()->getPayment();
-	$customerOptions = $sessionPayment->getData('additional_information');
+	$customerOptions = Mage::helper('laybuy')->getInstalmentData($sessionPayment);
+	/* $customerOptions['INIT'] = $sessionPayment->getData('laybuy_init');
+	$customerOptions['MONTHS'] = $sessionPayment->getData('laybuy_months'); */
 
 	$totals = Mage::getSingleton('checkout/session')->getQuote()->getTotals();
 	$grandtotal = $totals["grand_total"]->getValue();
@@ -43,7 +45,7 @@
 	<li>
         <label for="<?php echo $_code ?>_init" class="required"><em>*</em><?php echo $this->__('Initial Payment') ?> : </label>
         <div class="input-box">
-            <select onChange="document.getElementById('preview-tbl1').src = '<?php echo $this->getUrl('laybuy/standard/docalc',array('_secure'=>true)); ?>?currency=<?php echo  Mage::app()->getStore()->getCurrentCurrencyCode(); ?>&amt=<?php echo $grandtotal; ?>&init='+document.getElementById('<?php echo $_code ?>_init').value+'&mnth='+document.getElementById('<?php echo $_code ?>_months').value+'&rnd='+Math.random()+'&html=1';" id="<?php echo $_code ?>_init" name="payment[additional_information][INIT]" title="<?php echo $this->__('Initial Payment') ?>" class="required-entry">
+            <select onChange="document.getElementById('preview-tbl1').src = '<?php echo $this->getUrl('laybuy/standard/docalc',array('_secure'=>true)); ?>?currency=<?php echo  Mage::app()->getStore()->getCurrentCurrencyCode(); ?>&amt=<?php echo $grandtotal; ?>&init='+document.getElementById('<?php echo $_code ?>_init').value+'&mnth='+document.getElementById('<?php echo $_code ?>_months').value+'&rnd='+Math.random()+'&html=1';" id="<?php echo $_code ?>_init" name="payment[laybuy_init]" title="<?php echo $this->__('Initial Payment') ?>" class="required-entry">
             <?php foreach ($this->getArray('dp_amount') as $_data): ?>
                 <option value="<?php echo $_data['value'] ?>" <?php if(isset($customerOptions['INIT']) && $customerOptions['INIT'] && $customerOptions['INIT']==$_data['value']){ ?> selected="selected" <?php } ?>><?php echo $_data['label'] ?></option>
             <?php endforeach ?>
@@ -53,8 +55,8 @@
 	<li>
         <label for="<?php echo $_code ?>_months" class="required"><em>*</em><?php echo $this->__('Months to Pay') ?> : </label>
         <div class="input-box">
-            <select onChange="document.getElementById('preview-tbl1').src = '<?php echo $this->getUrl('laybuy/standard/docalc',array('_secure'=>true)); ?>?currency=<?php echo  Mage::app()->getStore()->getCurrentCurrencyCode(); ?>&amt=<?php echo $grandtotal; ?>&init='+document.getElementById('<?php echo $_code ?>_init').value+'&mnth='+document.getElementById('<?php echo $_code ?>_months').value+'&rnd='+Math.random()+'&html=1';" id="<?php echo $_code ?>_months" name="payment[additional_information][MONTHS]" title="<?php echo $this->__('Months to Pay') ?>" class="required-entry">
-            <?php $_recommendedMonth = isset($customerOptions['MONTHS'])?$customerOptions['MONTHS']:$this->getConfigData('months'); ?>
+            <select onChange="document.getElementById('preview-tbl1').src = '<?php echo $this->getUrl('laybuy/standard/docalc',array('_secure'=>true)); ?>?currency=<?php echo  Mage::app()->getStore()->getCurrentCurrencyCode(); ?>&amt=<?php echo $grandtotal; ?>&init='+document.getElementById('<?php echo $_code ?>_init').value+'&mnth='+document.getElementById('<?php echo $_code ?>_months').value+'&rnd='+Math.random()+'&html=1';" id="<?php echo $_code ?>_months" name="payment[laybuy_months]" title="<?php echo $this->__('Months to Pay') ?>" class="required-entry">
+            <?php $_recommendedMonth = isset($customerOptions['MONTHS']) && $customerOptions['MONTHS']?$customerOptions['MONTHS']:$this->getConfigData('months'); ?>
             <?php foreach ($this->getArray('months') as $_data): ?>
                 <option value="<?php echo $_data['value'] ?>"<?php if($_data['value']==$_recommendedMonth): ?> selected="selected"<?php endif ?>><?php echo $_data['label'] ?></option>
             <?php endforeach ?>
@@ -64,8 +66,9 @@
 	<li>
         <label for="preview-tbl1"><?php echo $this->__('Plan Preview') ?></label>
         <div id="preview-tbl1-wrapper" class="input-box" style="width:100% !important">
-            <iframe src="<?php echo $this->getUrl('laybuy/standard/docalc',array('_secure'=>true)); ?>?currency=<?php echo  Mage::app()->getStore()->getCurrentCurrencyCode(); ?>&amt=<?php echo $grandtotal; ?>&init=<?php echo $this->getConfigData('mind'); ?>&mnth=<?php echo $this->getConfigData('months'); ?>&html=1" name="preview-tbl1" id="preview-tbl1" style="width:100%; height:157px; border:0; margin:0; overflow:hidden" marginheight="0" marginwidth="0" noscroll></iframe>
-        </div>
+            <iframe src="<?php echo $this->getUrl('laybuy/standard/docalc',array('_secure'=>true)); ?>?currency=<?php echo  Mage::app()->getStore()->getCurrentCurrencyCode(); ?>&amt=<?php echo $grandtotal; ?>&init=<?php if(isset($customerOptions['INIT']) && $customerOptions['INIT']){ echo $customerOptions['INIT']; } else { echo $this->getConfigData('mind'); } ?>&mnth=<?php echo $_recommendedMonth; ?>&html=1" name="preview-tbl1" id="preview-tbl1" style="width:100%; height:157px; border:0; margin:0; overflow:hidden" marginheight="0" marginwidth="0" noscroll></iframe>
+		
+		</div>
     </li>
 	<li>
         <label for="preview-tbl12"><?php echo $this->__('Your goods/services will be delivered once your final payment has been received.') ?></label>

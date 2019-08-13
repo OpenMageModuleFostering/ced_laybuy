@@ -48,7 +48,7 @@ class Ced_LayBuy_Model_System_Config_Source_Categories
 
         foreach ($collection as $category) {
             $options []= array(
-               'label' => $category->getName(),
+               'label' => $category->getName()!=''?$category->getName():'Default Category',
                'value' => $category->getId()
             );
         }

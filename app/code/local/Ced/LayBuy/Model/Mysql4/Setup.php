@@ -26,12 +26,9 @@
  */
 
 /**
- * LayBuy Report Collection model
+ * LayBuy Resource Setup model
  */
  
-class Ced_LayBuy_Model_Resource_Report_Collection extends Mage_Core_Model_Resource_Db_Collection_Abstract {
-    protected function _construct()
-    {
-            $this->_init('laybuy/report');
-    }
-} 
+class Ced_LayBuy_Model_Mysql4_Setup extends Mage_Core_Model_Resource_Setup 
+{
+}

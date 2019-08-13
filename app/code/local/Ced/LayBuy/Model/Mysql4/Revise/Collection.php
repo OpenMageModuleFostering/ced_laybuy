@@ -26,35 +26,12 @@
  */
 
 /**
- * LayBuy Resource Revise model
+ * LayBuy Revise Collection model
  */
  
-class Ced_LayBuy_Model_Resource_Revise extends Mage_Core_Model_Resource_Db_Abstract{
-	protected function _construct()
-	{
-		$this->_init('laybuy/revise', 'id');
-	}
-	
-	/**
-     * Check if report with same account and report date already fetched
-     *
-     * @param Ced_LayBuy_Model_Report $report
-     * @param string $orderId
-     * @param string $reportDate
-     * @return Mage_Paypal_Model_Resource_Report_Settlement
-     */
-    public function loadByOrderId(Ced_LayBuy_Model_Report $report, $order_id)
+class Ced_LayBuy_Model_Mysql4_Revise_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract {
+    protected function _construct()
     {
-        $adapter = $this->_getReadAdapter();
-        $select  = $adapter->select()
-            ->from($this->getMainTable())
-            ->where('order_id = :order_id');
-
-        $data = $adapter->fetchRow($select, array(':order_id' => $order_id));
-        if ($data) {
-            $report->addData($data);
-        }
-
-        return $this;
+            $this->_init('laybuy/revise');
     }
-} 
+} 

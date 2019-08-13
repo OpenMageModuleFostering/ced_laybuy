@@ -138,7 +138,7 @@ class Ced_LayBuy_Adminhtml_ReportController extends Mage_Adminhtml_Controller_Ac
     {
         $rowId = $this->getRequest()->getParam('id');
         $data = $this->getRequest()->getParams();
-		print_r($data);die;
+		/* print_r($data);die; */
 		$reportModel = Mage::getModel('laybuy/report')->load($rowId);
 		
 		$temp = array();

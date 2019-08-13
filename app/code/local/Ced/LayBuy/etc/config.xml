@@ -66,10 +66,10 @@
 		<models>
 			<laybuy>
 				<class>Ced_LayBuy_Model</class>
-				<resourceModel>laybuy_resource</resourceModel>
+				<resourceModel>laybuy_mysql4</resourceModel>
 			</laybuy>
-			<laybuy_resource>
-	            	<class>Ced_LayBuy_Model_Resource</class>
+			<laybuy_mysql4>
+	            	<class>Ced_LayBuy_Model_Mysql4</class>
 	            	<entities>
 		                <report>
 		                    <table>laybuy_transaction_report</table>
@@ -78,13 +78,13 @@
 		                    <table>laybuy_revise_request_report</table>
 		                </revise>
 	            	</entities>
-		    </laybuy_resource>
+		    </laybuy_mysql4>
 		</models>
 		<resources>
 			<laybuy_setup>
 				<setup>
 					<module>Ced_LayBuy</module>
-					<class>Ced_LayBuy_Model_Resource_Setup</class>
+					<class>Ced_LayBuy_Model_Mysql4_Setup</class>
 				</setup>
 			</laybuy_setup>
    		</resources>

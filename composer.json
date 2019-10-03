@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/Ced_LayBuy",
+    "name": "OpenMageModuleFostering\/Ced_LayBuy",
     "type": "magento-module",
     "license": "Open-Software-License-(OSL)",
     "homepage": "",
     "description": "Magento LayBuy Payment Gateway Module Developed By Lay-Buy Financial Solutions Pty Ltd (warrin@lay-buys.com)",
     "authors": [
-    {
-        "name": "Warrin",
-        "email": "warrin@lay-buys.com"
-    }
-],
+        {
+            "name": "Warrin",
+            "email": "warrin@lay-buys.com"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }

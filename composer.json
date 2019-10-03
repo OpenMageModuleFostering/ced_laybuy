@@ -1,7 +1,7 @@
 {
-    "name": "OpenMageModuleFostering\/Ced_LayBuy",
+    "name": "openmage-module-fostering\/ced_laybuy",
     "type": "magento-module",
-    "license": "Open-Software-License-(OSL)",
+    "license": "OSL-3.0",
     "homepage": "",
     "description": "Magento LayBuy Payment Gateway Module Developed By Lay-Buy Financial Solutions Pty Ltd (warrin@lay-buys.com)",
     "authors": [
